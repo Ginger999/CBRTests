@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 
+import io.qameta.allure.Attachment;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -65,7 +69,12 @@ public class Test01 {
         System.out.print("Hello world!");
         Assert.assertEquals(7, 7);
     }
-
+    
+    @Step
+    public void checkUserName() {
+        Assert.assertEquals(7, 7);
+    }
+    
     @Test
     public void TestGoogle() {
         System.out.println(website);
