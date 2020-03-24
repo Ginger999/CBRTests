@@ -4,55 +4,33 @@
  * and open the template in the editor.
  */
 
-import io.qameta.allure.Attachment;
-import io.qameta.allure.Description;
+//import io.qameta.allure.Attachment;
+//import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 
 import org.junit.After;
-import org.junit.AfterClass;
+//import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
+//import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+//import static org.junit.Assert.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
+//import java.util.concurrent.TimeUnit;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 /**
  *
  * @author Ginger
  */
-public class Test01 {
-
-    public WebDriver driver;
-    public WebDriverWait wait;
-    public static String website;
-
+public class Test01 extends TestBase{
     public Test01() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-        System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        website = "https://www.google.com";
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
     }
 
     @Before
     public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.MILLISECONDS);
-        wait = new WebDriverWait(driver, 10);
+
     }
 
     @After
