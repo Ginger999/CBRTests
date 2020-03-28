@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebDriver;
@@ -53,6 +54,7 @@ public class TestBase {
         //driver = new ChromeDriver();
        
         tlDriver.set(driver);
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.MILLISECONDS);
         wait = new WebDriverWait(driver, 10);
         System.out.println(((HasCapabilities) driver).getCapabilities());
         
