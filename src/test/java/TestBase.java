@@ -11,6 +11,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 /**
  *
  * @author Ginger
@@ -44,10 +47,15 @@ public class TestBase {
             return;
         }
 
-        driver = new ChromeDriver();
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability("unexpectedAlertBehaviour", "dismiss");
+        driver = new ChromeDriver(caps);
+        //driver = new ChromeDriver();
+       
         tlDriver.set(driver);
         wait = new WebDriverWait(driver, 10);
-
+        System.out.println(((HasCapabilities) driver).getCapabilities());
+        
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {
                     driver.quit();

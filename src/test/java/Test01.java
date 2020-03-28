@@ -19,6 +19,7 @@ import org.openqa.selenium.By;
 
 //import java.util.concurrent.TimeUnit;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
+import org.openqa.selenium.WebElement;
 
 /**
  *
@@ -56,7 +57,10 @@ public class Test01 extends TestBase{
         System.out.println(baseURL);
         driver.get(baseURL);
         //driver.findElement(By.name("q")).sendKeys("webdriver");
-        //driver.findElement(By.name("btnK")).click();
+        //driver.findElement(By.className("btn btn-additional")).click();
+        //element.click();
+        WebElement element2 = driver.findElement(By.xpath("/html/body/header/div[2]/div/ul[1]/li[1]/div/div[2]/a[1]"));
+        element2.click();
         wait.until(titleIs("DNS – интернет магазин цифровой и бытовой техники по доступным ценам."));
     }
 }
