@@ -6,7 +6,7 @@
 
 //import io.qameta.allure.Attachment;
 //import io.qameta.allure.Description;
-import io.qameta.allure.Step;
+//import io.qameta.allure.Step;
 
 import org.junit.After;
 //import org.junit.AfterClass;
@@ -35,30 +35,28 @@ public class Test01 extends TestBase{
 
     @After
     public void tearDown() {
-        driver.quit();
-        driver = null;
     }
 
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void TestCalc() {
+    public void TestHello() {
         System.out.print("Hello world!");
         Assert.assertEquals(7, 7);
     }
     
-    @Step
-    public void checkUserName() {
-        Assert.assertEquals(7, 7);
-    }
+    //@Step
+    //public void checkUserName() {
+    //    Assert.assertEquals(7, 7);
+    //}
     
     @Test
-    public void TestGoogle() {
-        System.out.println(website);
-        driver.get(website);
-        driver.findElement(By.name("q")).sendKeys("webdriver");
-        driver.findElement(By.name("btnK")).click();
-        wait.until(titleIs("webdriver - Поиск в Google"));
+    public void TestURL() {
+        System.out.println(baseURL);
+        driver.get(baseURL);
+        //driver.findElement(By.name("q")).sendKeys("webdriver");
+        //driver.findElement(By.name("btnK")).click();
+        wait.until(titleIs("DNS – интернет магазин цифровой и бытовой техники по доступным ценам."));
     }
 }

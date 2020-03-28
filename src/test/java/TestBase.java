@@ -21,7 +21,7 @@ public class TestBase {
     public WebDriver driver;
     public WebDriverWait wait;
 
-    public static String website;
+    public static String baseURL;
 
     public TestBase() {
     }
@@ -29,7 +29,7 @@ public class TestBase {
     @BeforeClass
     public static void setUpClass() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        website = "https://www.google.com";
+        baseURL = "https://dns-shop.ru";
     }
 
     @AfterClass
