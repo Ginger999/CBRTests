@@ -21,6 +21,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import org.openqa.selenium.interactions.Actions;
+
 /**
  *
  * @author Ginger
@@ -60,24 +62,29 @@ public class Test01 extends TestBase {
     }
 
     @Test
-    public void TestSelectRegion(){
+    public void TestSelectRegion() {
         System.out.println(baseURL);
         driver.get(baseURL);
+        
         // set Region
-        WebElement element = driver.findElement(By.xpath("/html/body/header/div[2]/div/ul[1]/li[1]/div/div[2]/a[1]"));
-        element.click();
-        //WebElement element2 = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/div/div[2]/div[1]/a"));
-        //element2.click();
-        // find Smartphone
+        WebElement region = driver.findElement(By.xpath("/html/body/header/div[2]/div/ul[1]/li[1]/div/div[2]/a[1]"));
+        region.click();
+ 
+        // menu links
         String locGadgets = "[href='/catalog/17a890dc16404e77/smartfony-planshety-i-fototexnika/']";
+        String locSmartphone = "[href='/catalog/17a8a01d16404e77/smartfony/']";
+        String locSmartphone2019 = "[href='/catalog/recipe/8659ebf990b82f13/2019-goda/']";
+
+        // find gadgets -> smartfony -> smartfony2019
+        Actions actions = new Actions(driver);
         WebElement gadgets = driver.findElement(By.cssSelector(locGadgets));
-        gadgets.click(); 
-        
-        //String locSmartphone = "[href='/catalog/17a8a01d16404e77/smartfony/']";
-        //WebElement smartfony = gadgets.findElement(By.cssSelector(locSmartphone));
-        //smartfony.click();
-        
-        //WebElement smartfony1 = wait.until(ExpectedConditions.invisibilityOf(gadgets.findElement(By.cssSelector(locSmartphone))));
+        actions.moveToElement(gadgets).build().perform();
   
+        WebElement smartfony = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locSmartphone)));
+        actions.moveToElement(smartfony).build().perform();
+        
+        WebElement smartfony2019 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locSmartphone2019)));
+        smartfony2019.click();
+   
     }
 }
