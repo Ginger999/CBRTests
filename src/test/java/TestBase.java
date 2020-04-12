@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.By;
+import org.openqa.selenium.interactions.Actions;
 
 /**
  *
@@ -25,10 +26,13 @@ public class TestBase {
     public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
     public WebDriver driver;
     public WebDriverWait wait;
-
-    public static String baseURL;
+    public Actions actions;
+    
     public static int timeI;
     public static int timeW;
+
+    public static String baseURL;
+   
 
     public TestBase() {
     }
@@ -63,6 +67,7 @@ public class TestBase {
         if (tlDriver.get() != null) {
             driver = tlDriver.get();
             wait = new WebDriverWait(driver, 300);
+            actions = new Actions(driver);
             return;
         }
 
@@ -74,12 +79,13 @@ public class TestBase {
         tlDriver.set(driver);
         driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.MILLISECONDS);
         wait = new WebDriverWait(driver, timeW);
+        actions = new Actions(driver);
         System.out.println(((HasCapabilities) driver).getCapabilities());
 
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {
-                    driver.quit();
-                    driver = null;
+                    //driver.quit();
+                    //driver = null;
                 }));
     }
 

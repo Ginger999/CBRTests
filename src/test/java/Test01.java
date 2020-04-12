@@ -24,8 +24,6 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 import org.openqa.selenium.WebElement;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-import org.openqa.selenium.interactions.Actions;
-
 /**
  *
  * @author Ginger
@@ -34,15 +32,41 @@ public class Test01 extends TestBase {
 
     public Test01() {
     }
-     private static boolean ScanElements(String cssLocator) {
-        try {
-            //driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
-            return true;
-           
-        } finally {
-            //driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
-            return false;
+
+    private void FindItemPerformClick(String cssLocator, boolean toPerform, boolean toClick) {
+        System.out.println(cssLocator);
+        WebElement item = wait.until(visibilityOfElementLocated(By.cssSelector(cssLocator)));
+        if (toPerform) {
+            actions.moveToElement(item).build().perform();
         }
+        if (toClick) {
+            item.click();
+        }
+    }
+
+    private void PrintItems(List<WebElement> Items) {
+        int ItemsCount = Items.size();
+        System.out.println("ItemsCount: " + String.valueOf(ItemsCount));
+        for (int i = 0; i < ItemsCount; i++) {
+            System.out.println(String.valueOf(ItemsCount) + ": " + String.valueOf(i) + " |" + Items.get(i).getText());
+
+        }
+    }
+
+    private boolean FindInListByValueClick(List<WebElement> Items, String Value, boolean toClick) {
+        boolean res = false;
+        int ItemsCount = Items.size();
+        for (int i = 0; i < ItemsCount; i++) {
+            res = Items.get(i).getText().contains(Value);
+            System.out.println(Items.size() + " : " + i + " | " + Items.get(i).getText() + " | " + res + " | " + Value);
+            if (toClick) {
+                Items.get(i).click();
+            }
+            if (res) {
+                return res;
+            }
+        }
+        return res;
     }
 
     @Before
@@ -68,58 +92,90 @@ public class Test01 extends TestBase {
             region.get(0).click();
         }
 
-        // left menu links
+        //left menu links
         String locGadgets = "[href*=smartfony-planshety-i-fototexnika]";
         String locSmartphone = "a.ui-link.menu-desktop__second-level[href*=smartfony]";
         String locSmartphone2019 = "a.ui-link.menu-desktop__popup-link[href*='2019-goda'";
 
-        // find gadgets -> smartfony -> smartfony2019
-        Actions actions = new Actions(driver);
-        WebElement gadgets = wait.until(visibilityOfElementLocated(By.cssSelector(locGadgets)));
-        actions.moveToElement(gadgets).build().perform();
+        //find gadgets -> smartfony -> smartfony2019
+        FindItemPerformClick(locGadgets, true, false);
+        FindItemPerformClick(locSmartphone, true, false);
+        FindItemPerformClick(locSmartphone2019, false, true);
 
-        WebElement smartfony = wait.until(visibilityOfElementLocated(By.cssSelector(locSmartphone)));
-        actions.moveToElement(smartfony).build().perform();
-
-        WebElement smartfony2019 = wait.until(visibilityOfElementLocated(By.cssSelector(locSmartphone2019)));
-        smartfony2019.click();
         driver.manage().timeouts().implicitlyWait(300, TimeUnit.MILLISECONDS);
         wait.until(titleIs("Смартфоны 2019 года: купить в интернет магазине DNS. Смартфоны 2019 года: цены, большой каталог, новинки"));
 
         //find the 1st visible button in the list - 'Наличие'
-        String cssButtons = "span.ui-collapse__link-text";
-        WebElement e1 = wait.until(visibilityOfElementLocated(By.cssSelector(cssButtons)));
-        actions.moveToElement(e1).build().perform();
+        String cssDownButtons = "span.ui-collapse__link-text";
+        FindItemPerformClick(cssDownButtons, true, false);
         actions.sendKeys(Keys.PAGE_DOWN).perform();
 
         //find rest buttons in the list
-        List< WebElement> Buttons = driver.findElements(By.cssSelector(cssButtons));
+        List< WebElement> Buttons = driver.findElements(By.cssSelector(cssDownButtons));
         int Buttons_Count = Buttons.size();
 
         for (int j = 0; j < Buttons_Count; j++) {
             System.out.println(String.valueOf(Buttons.size()) + ": " + String.valueOf(j) + " |" + Buttons.get(j).getText());
             actions.moveToElement(Buttons.get(j)).build().perform();
-            driver.findElements(By.cssSelector(cssButtons));
+            driver.findElements(By.cssSelector(cssDownButtons));
         }
 
         String cssRadio = "div.ui-radio.ui-radio_list .ui-radio__content_list";
-        List<WebElement> Radio = driver.findElements(By.cssSelector(cssRadio));
-        int Radio_Count = Radio.size();
-        System.out.println("Radio_Count: " + String.valueOf(Radio_Count));
+        //boolean founded = ScanItems(cssRadio, "10001");
 
-        boolean isPriceSelected = false;
-        for (int j = 0; j < Radio_Count; j++) {
-            System.out.println(String.valueOf(Radio_Count) + ": " + String.valueOf(j) + " |" + Radio.get(j).getText());
+        System.out.println("cssRadio");
+        String value = "10 001";
 
-            if (Radio.get(j).getText().contains("10001")) {
-                Radio.get(j).click();
-                isPriceSelected = true;
-                System.out.println(String.valueOf((j)));
-            } else {
-                Radio.get(3).click();
+        int i = 0;
+        boolean isFound = false;
+        do {
+            i++;
+            Buttons = driver.findElements(By.cssSelector(cssRadio));
+            System.out.println(Buttons.size() + " | " + i + " | ");
+            isFound = FindInListByValueClick(Buttons, value, true);
+            if (!isFound) {
+                actions.sendKeys(Keys.PAGE_DOWN).perform();
             }
-        }
+        } while (i < 5 & isFound == false);
 
+        System.out.println("cssDownButtons");
+        value = "Производитель";
+        i = 0;
+        isFound = false;
+        do {
+            i++;
+            Buttons = driver.findElements(By.cssSelector(cssDownButtons));
+            PrintItems(Buttons);
+            isFound = FindInListByValueClick(Buttons, value, false);
+            System.out.println(Buttons.size() + " | " + i + " | " + isFound);
+            if (!isFound) {
+                actions.sendKeys(Keys.PAGE_DOWN).perform();
+            } else {
+                i = 30;
+            }
+        } while (i < 30 & isFound == false);
+
+        //String cssShowAll = "a.ui-link.ui-link_blue.ui-link_pseudolink.ui-list-controls__link.ui-list-controls__link_fold >span";
+        String cssShowAll = "i.ui-list-controls__icon.ui-list-controls__icon_down";
+        FindItemPerformClick(cssShowAll, false, true);
+//
+////        actions.sendKeys(Keys.PAGE_DOWN).perform();
+//        cssDownButtons ="div.ui-checkbox-group.ui-checkbox-group_list";
+//        Buttons = driver.findElements(By.cssSelector(cssDownButtons)); 
+//        PrintItems(Buttons);
+//       
+
+        //String cssXiaomi = "input.ui-checkbox__input.ui-checkbox__input_list[value='xiaomi'";
+        String cssXiaomi = "input.ui-checkbox__input.ui-checkbox__input_list";
+        Buttons = driver.findElements(By.cssSelector(cssDownButtons));
+        PrintItems(Buttons);
+//        FindItemPerformClick(cssXiaomi, false, false);
+//
+//        for (int j = 0; j < Buttons_Count; j++) {
+//            System.out.println(String.valueOf(Buttons.size()) + ": " + String.valueOf(j) + " |" + Buttons.get(j).getText());
+//            actions.moveToElement(Buttons.get(j)).build().perform();
+//            driver.findElements(By.cssSelector(cssDownButtons));
+//        }
 //        Buttons = driver.findElements(By.cssSelector(".ui-collapse__link_in"));
 //        Buttons.get(3).click();
 //        WebElement el = wait.until(visibilityOfElementLocated(By.cssSelector(locGadgets)));
@@ -142,6 +198,5 @@ public class Test01 extends TestBase {
         //driver.manage().timeouts().implicitlyWait(300, TimeUnit.MILLISECONDS);
 //        WebElement e1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locE1)));
 //        actions.moveToElement(e1).build().perform();
-
     }
 }
