@@ -14,6 +14,7 @@ import org.junit.BeforeClass;
 
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.By;
 
 /**
  *
@@ -26,14 +27,31 @@ public class TestBase {
     public WebDriverWait wait;
 
     public static String baseURL;
+    public static int timeI;
+    public static int timeW;
 
     public TestBase() {
+    }
+
+    public static boolean isElementPresent(WebDriver driver, By locator) {
+        return driver.findElements(locator).size() > 0;
+    }
+
+    public static boolean isElementPresent2(WebDriver driver, By locator) {
+        try {
+            driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
+            return driver.findElements(locator).size() > 0;
+        } finally {
+            driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
+        }
     }
 
     @BeforeClass
     public static void setUpClass() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         baseURL = "https://dns-shop.ru";
+        timeI = 45;
+        timeW = 45;
     }
 
     @AfterClass
@@ -44,7 +62,7 @@ public class TestBase {
     public void start() {
         if (tlDriver.get() != null) {
             driver = tlDriver.get();
-            wait = new WebDriverWait(driver, 10);
+            wait = new WebDriverWait(driver, 300);
             return;
         }
 
@@ -52,12 +70,12 @@ public class TestBase {
         caps.setCapability("unexpectedAlertBehaviour", "dismiss");
         driver = new ChromeDriver(caps);
         //driver = new ChromeDriver();
-       
+
         tlDriver.set(driver);
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.MILLISECONDS);
-        wait = new WebDriverWait(driver, 10);
+        driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.MILLISECONDS);
+        wait = new WebDriverWait(driver, timeW);
         System.out.println(((HasCapabilities) driver).getCapabilities());
-        
+
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {
                     driver.quit();

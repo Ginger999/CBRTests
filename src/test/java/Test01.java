@@ -22,7 +22,7 @@ import org.openqa.selenium.Keys;
 //import java.util.concurrent.TimeUnit;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import org.openqa.selenium.interactions.Actions;
 
@@ -33,6 +33,16 @@ import org.openqa.selenium.interactions.Actions;
 public class Test01 extends TestBase {
 
     public Test01() {
+    }
+     private static boolean ScanElements(String cssLocator) {
+        try {
+            //driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
+            return true;
+           
+        } finally {
+            //driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
+            return false;
+        }
     }
 
     @Before
@@ -53,8 +63,10 @@ public class Test01 extends TestBase {
         driver.get(baseURL);
 
         // set Region
-        WebElement region = driver.findElement(By.xpath("/html/body/header/div[2]/div/ul[1]/li[1]/div/div[2]/a[1]"));
-        region.click();
+        List< WebElement> region = driver.findElements(By.cssSelector("a.btn.btn-additional"));
+        if (region.size() > 0) {
+            region.get(0).click();
+        }
 
         // left menu links
         String locGadgets = "[href*=smartfony-planshety-i-fototexnika]";
@@ -63,25 +75,25 @@ public class Test01 extends TestBase {
 
         // find gadgets -> smartfony -> smartfony2019
         Actions actions = new Actions(driver);
-        WebElement gadgets = driver.findElement(By.cssSelector(locGadgets));
+        WebElement gadgets = wait.until(visibilityOfElementLocated(By.cssSelector(locGadgets)));
         actions.moveToElement(gadgets).build().perform();
 
-        WebElement smartfony = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locSmartphone)));
+        WebElement smartfony = wait.until(visibilityOfElementLocated(By.cssSelector(locSmartphone)));
         actions.moveToElement(smartfony).build().perform();
 
-        WebElement smartfony2019 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locSmartphone2019)));
+        WebElement smartfony2019 = wait.until(visibilityOfElementLocated(By.cssSelector(locSmartphone2019)));
         smartfony2019.click();
         driver.manage().timeouts().implicitlyWait(300, TimeUnit.MILLISECONDS);
         wait.until(titleIs("Смартфоны 2019 года: купить в интернет магазине DNS. Смартфоны 2019 года: цены, большой каталог, новинки"));
 
         //find the 1st visible button in the list - 'Наличие'
         String cssButtons = "span.ui-collapse__link-text";
-        WebElement e1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssButtons)));
-        //actions.moveToElement(e1).build().perform();
+        WebElement e1 = wait.until(visibilityOfElementLocated(By.cssSelector(cssButtons)));
+        actions.moveToElement(e1).build().perform();
         actions.sendKeys(Keys.PAGE_DOWN).perform();
 
         //find rest buttons in the list
-        List<WebElement> Buttons = driver.findElements(By.cssSelector(cssButtons));
+        List< WebElement> Buttons = driver.findElements(By.cssSelector(cssButtons));
         int Buttons_Count = Buttons.size();
 
         for (int j = 0; j < Buttons_Count; j++) {
@@ -94,9 +106,26 @@ public class Test01 extends TestBase {
         List<WebElement> Radio = driver.findElements(By.cssSelector(cssRadio));
         int Radio_Count = Radio.size();
         System.out.println("Radio_Count: " + String.valueOf(Radio_Count));
+
+        boolean isPriceSelected = false;
         for (int j = 0; j < Radio_Count; j++) {
             System.out.println(String.valueOf(Radio_Count) + ": " + String.valueOf(j) + " |" + Radio.get(j).getText());
+
+            if (Radio.get(j).getText().contains("10001")) {
+                Radio.get(j).click();
+                isPriceSelected = true;
+                System.out.println(String.valueOf((j)));
+            } else {
+                Radio.get(3).click();
+            }
         }
+
+//        Buttons = driver.findElements(By.cssSelector(".ui-collapse__link_in"));
+//        Buttons.get(3).click();
+//        WebElement el = wait.until(visibilityOfElementLocated(By.cssSelector(locGadgets)));
+//        el.click();
+//
+//        String cssManufacturer = ".ui-checkbox.ui-checkbox_list > input[value='xiaomi']";
         //WebElement price = driver.findElement(By.xpath("/html/body/div[1]/div/div[5]/div[1]/div[2]/div[5]/div[2]/a/span"));
         //actions.moveToElement(price).build().perform();
         //WebElement price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div/div[5]/div[1]/div[2]/div[5]/div[2]/a/span")));
