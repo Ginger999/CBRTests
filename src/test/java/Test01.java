@@ -156,8 +156,10 @@ public class Test01 extends TestBase {
         } while (i < 30 & isFound == false);
 
         //String cssShowAll = "a.ui-link.ui-link_blue.ui-link_pseudolink.ui-list-controls__link.ui-list-controls__link_fold >span";
+        driver.manage().timeouts().implicitlyWait(300, TimeUnit.SECONDS);
         String cssShowAll = "i.ui-list-controls__icon.ui-list-controls__icon_down";
         FindItemPerformClick(cssShowAll, false, true);
+        driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.SECONDS);
 //
 ////        actions.sendKeys(Keys.PAGE_DOWN).perform();
 //        cssDownButtons ="div.ui-checkbox-group.ui-checkbox-group_list";
@@ -166,9 +168,15 @@ public class Test01 extends TestBase {
 //       
 
         //String cssXiaomi = "input.ui-checkbox__input.ui-checkbox__input_list[value='xiaomi'";
-        String cssXiaomi = "input.ui-checkbox__input.ui-checkbox__input_list";
-        Buttons = driver.findElements(By.cssSelector(cssDownButtons));
+        String cssXiaomi = "input.ui-checkbox__input.ui-checkbox__input_list[value='xiaomi']";
+        Buttons = driver.findElements(By.cssSelector(cssXiaomi));
         PrintItems(Buttons);
+        WebElement item = driver.findElement(By.cssSelector(cssXiaomi));
+        System.out.println("attribute " + item.getAttribute("value"));
+        //actions.moveToElement(item).build().perform();
+        //item = driver.findElement(By.cssSelector(cssXiaomi));
+        item.click();
+
 //        FindItemPerformClick(cssXiaomi, false, false);
 //
 //        for (int j = 0; j < Buttons_Count; j++) {
