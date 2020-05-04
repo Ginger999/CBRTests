@@ -75,7 +75,7 @@ public class TestBase {
             }
             Assert.assertFalse(isSubElementPresent(null, By.cssSelector("confirm-city-mobile")));
         }
-        driver.manage().timeouts().implicitlyWait(300, TimeUnit.MILLISECONDS);
+
         wait.until(elementToBeClickable(By.cssSelector("[href*=smartfony-planshety-i-fototexnika]")));
 
         // left menu links
@@ -235,14 +235,14 @@ public class TestBase {
         System.out.println(((HasCapabilities) driver).getCapabilities());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    //driver.quit();
-                    //driver = null;
+                    // driver.quit();
+                    // driver = null;
                 }));
     }
 
     @After
     public void stop() {
-        driver.quit();
-        driver = null;
+        // driver.quit();
+        // driver = null;
     }
 }

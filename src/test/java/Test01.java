@@ -1,13 +1,13 @@
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class Test01 extends TestBase {
 
@@ -46,6 +46,7 @@ public class Test01 extends TestBase {
         List<String> values = Arrays.asList("32tl", "32tg");
         setSectionValues("Объем встроенной памяти", "check", "value", values, true);
 
+        // apply filter
         WebElement btnFilter = isSubElementPresent(null, "button.button-ui.button-ui_brand.left-filters__button", "textContent", "Применить", "startsWith");
 
         if (!(btnFilter.equals(null))) {
