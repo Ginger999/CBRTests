@@ -26,11 +26,12 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElemen
 public class TestBase {
 
     public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
-    public WebDriver driver;
+    public static WebDriver driver;
     public static WebDriverWait wait;
     public static Actions actions;
 
-    public static int timeI;
+    public static int timeIMaximum;
+    public static int timeIDefault;
     public static int timeW;
 
     public static String baseURL;
@@ -39,7 +40,64 @@ public class TestBase {
     public TestBase() {
     }
 
-    boolean isSubElementPresent(WebElement rootElement, By locator) {
+
+    @BeforeClass
+    public static void setUpClass() {
+        // System.setProperty("webdriver.chrome.driver", "chromedriver");
+        baseURL = "https://dns-shop.ru";
+        baseCity = "Томск";
+        timeIMaximum = 5000;
+        timeIDefault = 100;
+        timeW = 100;
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        // driver.quit();
+        // driver = null;
+    }
+
+    @Before
+    public void start() {
+        // if (tlDriver.get() != null) {
+        //     System.out.println("Before. driver !=null");
+        //     // driver = tlDriver.get();
+        //     // wait = new WebDriverWait(driver, timeW);
+        //     // actions = new Actions(driver);
+        //     // return;
+        //     driver.quit();
+        //     driver = null;
+        // }
+
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability("unexpectedAlertBehaviour", "dismiss");
+        driver = new ChromeDriver();
+
+        //tlDriver.set(driver);
+        driver.manage().timeouts().implicitlyWait(timeIDefault, TimeUnit.MILLISECONDS);
+        driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, timeW);
+        actions = new Actions(driver);
+        System.out.println(((HasCapabilities) driver).getCapabilities());
+        open_smartfony_2019();
+
+
+        // Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        //     if (!(driver.equals(null))) {
+        //         System.out.println("Runtime.getRuntime().addShutdownHook");
+        //         driver.quit();
+        //         driver = null;
+        //     }
+        // }));
+    }
+
+    @After
+    public void stop() {
+        driver.quit();
+        driver = null;
+   }
+
+    public static boolean isSubElementPresent(WebElement rootElement, By locator) {
         if (rootElement == null) {
             return driver.findElements(locator).size() > 0;
         } else {
@@ -57,9 +115,7 @@ public class TestBase {
             element.click();
         }
     }
-
-
-    public void open_smartfony_2019() {
+    public static void open_smartfony_2019() {
         // open site
         driver.get(baseURL);
         wait.until(titleIs("DNS – интернет магазин цифровой и бытовой техники по доступным ценам."));
@@ -75,8 +131,7 @@ public class TestBase {
             }
             Assert.assertFalse(isSubElementPresent(null, By.cssSelector("confirm-city-mobile")));
         }
-
-        wait.until(elementToBeClickable(By.cssSelector("[href*=smartfony-planshety-i-fototexnika]")));
+        wait.until(presenceOfElementLocated(By.cssSelector("div.menu-desktop__root-info")));
 
         // left menu links
         String locGadgets = "[href*=smartfony-planshety-i-fototexnika]";
@@ -84,9 +139,11 @@ public class TestBase {
         String locSmartphone2019 = "a.ui-link.menu-desktop__popup-link[href*='2019-goda'";
 
         // find gadgets -> smartfony -> smartfony2019
+        driver.manage().timeouts().implicitlyWait(timeIMaximum, TimeUnit.MILLISECONDS);
         findItemPerformClick(locGadgets, true, false);
         findItemPerformClick(locSmartphone, true, false);
         findItemPerformClick(locSmartphone2019, false, true);
+        driver.manage().timeouts().implicitlyWait(timeIDefault, TimeUnit.MILLISECONDS);
     }
 
     /* Clicks on the check/radio buttons which have specified values */
@@ -199,50 +256,5 @@ public class TestBase {
             scroll_index++;
         }
         return null;
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-        // System.setProperty("webdriver.chrome.driver", "chromedriver");
-        baseURL = "https://dns-shop.ru";
-        baseCity = "Томск";
-        timeI = 45;
-        timeW = 45;
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void start() {
-        if (tlDriver.get() != null) {
-            driver = tlDriver.get();
-            wait = new WebDriverWait(driver, 300);
-            actions = new Actions(driver);
-            return;
-        }
-
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability("unexpectedAlertBehaviour", "dismiss");
-        driver = new ChromeDriver();
-
-        tlDriver.set(driver);
-        driver.manage().timeouts().implicitlyWait(timeI, TimeUnit.MILLISECONDS);
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, timeW);
-        actions = new Actions(driver);
-        System.out.println(((HasCapabilities) driver).getCapabilities());
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    // driver.quit();
-                    // driver = null;
-                }));
-    }
-
-    @After
-    public void stop() {
-        // driver.quit();
-        // driver = null;
     }
 }

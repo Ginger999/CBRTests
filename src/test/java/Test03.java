@@ -2,28 +2,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.WebElement;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 
 public class Test03 extends TestBase {
 
-    public Test03() {
-    }
-
-    @Before
-    public void open_smartfony_2019_test() {
-        open_smartfony_2019();
-    }
-
     @Test
     public void TestPriceWithGauarantee() {
         // wait for the element - 'Наличие'
+        System.out.println("TestPriceWithGauarantee");
         wait.until(presenceOfElementLocated(By.cssSelector("span.ui-collapse__link-text")));
 
         // find section - 'Цена' and set values
@@ -37,15 +30,37 @@ public class Test03 extends TestBase {
         // find the 1st part of complex checkbox: element by it's value
         String cssCheckProperty = "input.ui-checkbox__input.ui-checkbox__input_list[value='" + valuesOfBrand.get(0)
                 + "']";
-        WebElement btnCheckProperty = driver.findElement(By.cssSelector(cssCheckProperty));
-        actions.moveToElement(btnCheckProperty).build().perform();
 
         // find the 2nd part of complex checkbox: element to click
         String xpathCheckClick = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @value='"
                 + valuesOfBrand.get(0) + "']/..";
+
+        clickAfterChecked(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
+
+        List<WebElement> phones = driver.findElements(By.cssSelector("div.product-info__title-link"));
+        phones.get(0).click();
+        WebElement price = driver.findElement(By.cssSelector("span.current-price-value[data-role*='current']"));
+        String phonePrice = price.getAttribute("data-price-value");
+
+        WebElement select = wait.until(visibilityOfElementLocated(By.cssSelector("select.form-control.select")));
+        Select x = new Select(select);
+        x.selectByIndex(1);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+        String totalPrice = price.getAttribute("textContent").replaceAll(" ", "");
+        float guarantee = Float.parseFloat(totalPrice) - Float.parseFloat(phonePrice);
+
+        System.out.println("Phone price: " + phonePrice + " Guarantee: " + guarantee + "Total price: " +  totalPrice);
+    }
+    public void clickAfterChecked(String cssCheckProperty, String xpathCheckClick, String cssFloatButton) {
+        // find the 1st part of complex checkbox: element by it's value
+        WebElement btnCheckProperty = driver.findElement(By.cssSelector(cssCheckProperty));
+        actions.moveToElement(btnCheckProperty).build().perform();
+
+        // find the 2nd part of complex checkbox: element to click
         WebElement btnCheckClick = driver.findElement(By.xpath(xpathCheckClick));
 
-        boolean isAppliedShowButton = false;
+        boolean isAppliedFloatButton = false;
         boolean isChecked;
         do{
             // get attribute("checked")
@@ -55,39 +70,23 @@ public class Test03 extends TestBase {
                 isChecked = false; // because attribute("checked") = null when checkbox is clear
             }
             if (!isChecked){
-                // click on the float button - 'Показать'
+                // click on the float button
                 try {
                     btnCheckClick.click();
-                    wait.until(presenceOfElementLocated(By.cssSelector("div.apply-filters-float-btn"))).click();
-                    //driver.findElement(By.cssSelector("div.apply-filters-float-btn")).click();
-                    isAppliedShowButton = true;
+                    wait.until(presenceOfElementLocated(By.cssSelector(cssFloatButton))).click();
+                    isAppliedFloatButton = true;
                 } catch (Exception e) {
-                    isAppliedShowButton = false;
+                    isAppliedFloatButton = false;
                 }
-                if (!isAppliedShowButton) {
+                if (!isAppliedFloatButton) {
                     btnCheckClick.click();
                 }
             } else {
-                if (!isAppliedShowButton) {
+                if (!isAppliedFloatButton) {
                     btnCheckClick.click();
                 }
             }
         }
-        while (!isAppliedShowButton);
-        List<WebElement> phones = driver
-                .findElements(By.cssSelector("div.product-info__title-link"));
-        phones.get(0).click();
-        WebElement price = driver.findElement(By.cssSelector("span.current-price-value[data-role*='current']"));
-        String phonePrice = price.getAttribute("data-price-value");
-
-        Select x = new Select(driver.findElement(By.cssSelector("select.form-control.select")));
-        x.selectByIndex(1);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
-        String phonePriceUp = price.getAttribute("textContent").replaceAll(" ", "");
-        float guarantee = Float.parseFloat(phonePriceUp) - Float.parseFloat(phonePrice);
-
-        System.out.println("Phone prices: " + " " + phonePrice + " " + phonePriceUp + " " + guarantee);
-
+        while (!isAppliedFloatButton);
     }
 }

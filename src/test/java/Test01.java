@@ -2,7 +2,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import org.openqa.selenium.By;
@@ -11,21 +10,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElemen
 
 public class Test01 extends TestBase {
 
+
     public Test01() {
-    }
-
-    @Before
-    public void open_smartfony_2019_test() {
-        open_smartfony_2019();
-    }
-
-    private boolean hasOneOfValues(String Text, List<String> values){
-        for (int j = 0; j < values.size(); j++) {
-            if(Text.toUpperCase().contains(values.get(j).toUpperCase())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Test
@@ -47,7 +33,8 @@ public class Test01 extends TestBase {
         setSectionValues("Объем встроенной памяти", "check", "value", values, true);
 
         // apply filter
-        WebElement btnFilter = isSubElementPresent(null, "button.button-ui.button-ui_brand.left-filters__button", "textContent", "Применить", "startsWith");
+        WebElement btnFilter = isSubElementPresent(null, "button.button-ui.button-ui_brand.left-filters__button",
+                "textContent", "Применить", "startsWith");
 
         if (!(btnFilter.equals(null))) {
             btnFilter.click();
@@ -58,7 +45,7 @@ public class Test01 extends TestBase {
         int pageCount;
 
         if (pages.size() > 0) {
-            pageCount = pages.size() - 4;  // pages.size() - number of navigation buttons
+            pageCount = pages.size() - 4; // pages.size() - number of navigation buttons
         } else {
             pageCount = 1;
         }
@@ -71,11 +58,21 @@ public class Test01 extends TestBase {
             phonesContent = phones.get(p).getAttribute("textContent");
 
             // check asserts for a brand and for memory
-            Assert.assertTrue(hasOneOfValues(phonesContent, valueOfBrand));
-            Assert.assertTrue(hasOneOfValues(phonesContent, valueOfMemory));
-            if (pageCount > 1){
-                pages.get(pages.size()-1).click(); // get '>' navigation button
+            Assert.assertTrue("полет1 нормальный", hasOneOfValues(phonesContent, valueOfBrand));
+            Assert.assertTrue("полет2 нормальный", hasOneOfValues(phonesContent, valueOfMemory));
+
+            if (pageCount > 1) {
+                pages.get(pages.size() - 1).click(); // get '>' navigation button
             }
         }
+    }
+
+    private boolean hasOneOfValues(String Text, List<String> values){
+        for (int j = 0; j < values.size(); j++) {
+            if(Text.toUpperCase().contains(values.get(j).toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
