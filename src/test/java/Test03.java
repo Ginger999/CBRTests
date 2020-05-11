@@ -15,17 +15,20 @@ public class Test03 extends TestBase {
 
     @Test
     public void TestPriceWithGauarantee() {
+        // open smartphones 2019
+        app.smartfony2019PageOpen();
+
         // wait for the element - 'Наличие'
         System.out.println("TestPriceWithGauarantee");
-        wait.until(presenceOfElementLocated(By.cssSelector("span.ui-collapse__link-text")));
+        app.smartfony2019Page.utils.wait.until(presenceOfElementLocated(By.cssSelector("span.ui-collapse__link-text")));
 
         // find section - 'Цена' and set values
         List<String> valueOfPrice = Arrays.asList("27001");
-        setSectionValues("Цена", "radio", "data-min", valueOfPrice, false);
+        app.smartfony2019Page.utils.setSectionValues("Цена", "radio", "data-min", valueOfPrice, false);
 
         // find section - 'Производитель' and set values
         List<String> valuesOfBrand = Arrays.asList("apple");
-        setSectionValues("Производитель", "check", "value", valuesOfBrand, true);
+        app.smartfony2019Page.utils.setSectionValues("Производитель", "check", "value", valuesOfBrand, true);
 
         // find the 1st part of complex checkbox: element by it's value
         String cssCheckProperty = "input.ui-checkbox__input.ui-checkbox__input_list[value='" + valuesOfBrand.get(0)
@@ -37,28 +40,30 @@ public class Test03 extends TestBase {
 
         clickAfterChecked(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
 
-        List<WebElement> phones = driver.findElements(By.cssSelector("div.product-info__title-link"));
+        List<WebElement> phones = app.smartfony2019Page.utils.driver.findElements(By.cssSelector("div.product-info__title-link"));
         phones.get(0).click();
-        WebElement price = driver.findElement(By.cssSelector("span.current-price-value[data-role*='current']"));
+        WebElement price = app.smartfony2019Page.utils.driver.findElement(By.cssSelector("span.current-price-value[data-role*='current']"));
         String phonePrice = price.getAttribute("data-price-value");
 
-        WebElement select = wait.until(visibilityOfElementLocated(By.cssSelector("select.form-control.select")));
-        Select x = new Select(select);
-        x.selectByIndex(1);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        // select garantee
+        WebElement select = app.smartfony2019Page.utils.wait.until(visibilityOfElementLocated(By.cssSelector("select.form-control.select")));
+        Select garanteeList = new Select(select);
+        garanteeList.selectByIndex(1);
+        app.smartfony2019Page.utils.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
         String totalPrice = price.getAttribute("textContent").replaceAll(" ", "");
         float guarantee = Float.parseFloat(totalPrice) - Float.parseFloat(phonePrice);
 
         System.out.println("Phone price: " + phonePrice + " Guarantee: " + guarantee + "Total price: " +  totalPrice);
     }
+
     public void clickAfterChecked(String cssCheckProperty, String xpathCheckClick, String cssFloatButton) {
         // find the 1st part of complex checkbox: element by it's value
-        WebElement btnCheckProperty = driver.findElement(By.cssSelector(cssCheckProperty));
-        actions.moveToElement(btnCheckProperty).build().perform();
+        WebElement btnCheckProperty = app.smartfony2019Page.utils.driver.findElement(By.cssSelector(cssCheckProperty));
+        app.smartfony2019Page.utils.actions.moveToElement(btnCheckProperty).build().perform();
 
         // find the 2nd part of complex checkbox: element to click
-        WebElement btnCheckClick = driver.findElement(By.xpath(xpathCheckClick));
+        WebElement btnCheckClick = app.smartfony2019Page.utils.driver.findElement(By.xpath(xpathCheckClick));
 
         boolean isAppliedFloatButton = false;
         boolean isChecked;
@@ -73,7 +78,7 @@ public class Test03 extends TestBase {
                 // click on the float button
                 try {
                     btnCheckClick.click();
-                    wait.until(presenceOfElementLocated(By.cssSelector(cssFloatButton))).click();
+                    app.smartfony2019Page.utils.wait.until(presenceOfElementLocated(By.cssSelector(cssFloatButton))).click();
                     isAppliedFloatButton = true;
                 } catch (Exception e) {
                     isAppliedFloatButton = false;
