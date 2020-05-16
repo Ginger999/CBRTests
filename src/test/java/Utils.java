@@ -25,7 +25,6 @@ public class Utils {
     public Utils(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
-        //wait = new WebDriverWait(driver, TestBase.TIME_WAIT);
         actions = new Actions(driver);
     }
 
@@ -70,7 +69,7 @@ public class Utils {
         wait.until(presenceOfElementLocated(By.cssSelector("div.menu-desktop__root-info")));
     }
 
-    /* Retuns true if webelement is founded after down scrolling 
+    /* Retuns true if webelement is founded after down scrolling
        using driver or an element as a root to search.
     */
 
@@ -221,9 +220,23 @@ public class Utils {
         return driver.findElements(By.cssSelector("div[data-id='product']"));
     }
 
+    /* Returns the list of feature blocks */
+    public List<WebElement> getProductComparisonFeaturesBlocks() {
+        return driver.findElements(By.cssSelector("div.group-table__option-wrapper"));
+    }
+
+    /* Returns the list of feature values within one feature block */
+    public List<WebElement> getFeatureBlockValues(WebElement featureBlock) {
+        return featureBlock.findElements(By.cssSelector("div.group-table__data>p"));
+    }
+
+    /* Returns the name of the feature */
+    public String getFeatureTitle(WebElement featureBlock) {
+        return featureBlock.findElement(By.cssSelector("span.group-table__option-name")).getAttribute("textContent");
+    }
+
     public String getProductCurrentPrice() {
         return getProductPriceBlock().getAttribute("data-price-value").replaceAll(" ", "");
-
     }
 
     private WebElement getProductPriceBlock() {
@@ -304,9 +317,9 @@ public class Utils {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    public void showDifferentPhoneSettings() {
+    public void showDifferentProductSettings() {
         // slider
-        // вставить проверку, что переключаться надо
+        // TO DO check the current slider state
         driver.findElement(By.cssSelector("span.base-ui-toggle__icon")).click();
     }
 
@@ -320,10 +333,7 @@ public class Utils {
         }
     }
 
-    /* Clicks on 'Показать' button
-        1. click on checkbox wich contains value name
-        2. wait 'Показать' button
-        3. click on 'Показать' button  */
+    /* Clicks on 'Показать' button */
     public void applyFilterByShowButton(Filter filter) {
         // TO DO выбор не только по getBrandValues, сделать унивесальным
         String attributeValue = filter.getBrandValues().get(0);
@@ -338,7 +348,11 @@ public class Utils {
         clickShowButton(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
     }
 
-    /* Catches 'Показать' button and clicks on it */
+    /* Catches 'Показать' button and clicks on it
+        1. click on checkbox wich contains value name
+        2. wait 'Показать' button
+        3. click on 'Показать' button
+    */
     public void clickShowButton(String cssCheckProperty, String xpathCheckClick, String cssFloatButton) {
         // find the 1st part of complex checkbox: element by it's value
         WebElement btnCheckProperty = driver.findElement(By.cssSelector(cssCheckProperty));

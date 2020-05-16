@@ -3,7 +3,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -23,44 +22,45 @@ public class Test02 extends TestBase {
         int phonesCount = 2;
         utils.addProductsToCompare(phonesCount);
 
-        List < WebElement > rows = driver.findElements(By.cssSelector("div.group-table__option-wrapper"));
-        WebElement row;
-        List < WebElement > e1ement;
-        String s1;
-        String s2;
-        List < String > listEqual = new ArrayList < > ();
-        List < String > listDfifferent = new ArrayList < > ();
-        String title;
+        List < String > listOfEqual= getFeatureList(phonesCount, "equal");
+        utils.showDifferentProductSettings();
+        List<String> listOfDifference = getFeatureList(phonesCount, "");
+
+        listOfEqual.retainAll(listOfDifference); // get intersection list
+
+        Assert.assertEquals("Перестали отображаться одинаковые параметры", listOfEqual.size(), 0);
+    }
+
+    private List < String > getFeatureList(int phonesCount, String kind) {
+        List < WebElement > rows = utils.getProductComparisonFeaturesBlocks();
+        WebElement feature;
+        List < WebElement > values;
+        String v1;
+        String v2;
+        List < String > featureNamesList = new ArrayList < > ();
+        boolean isEqual;
         for (int i = 0; i < rows.size(); i++) {
-            row = rows.get(i);
-            e1ement = row.findElements(By.cssSelector("div.group-table__data>p")); // row values
-            boolean isEqual = true;
-            for (int j = 0; j < phonesCount - 1; j++) {
-                s1 = e1ement.get(j).getAttribute("textContent");
-                s2 = e1ement.get(j + 1).getAttribute("textContent");
-                isEqual = isEqual & s1.equals(s2);
+            feature = rows.get(i);
+            values = utils.getFeatureBlockValues(feature); // featureBlock values
+            switch (kind) {
+                case "equal":
+                    isEqual = true;
+                    // compare the values of the feature within one block
+                    for (int j = 0; j < phonesCount - 1; j++) {
+                        v1 = values.get(j).getAttribute("textContent");
+                        v2 = values.get(j + 1).getAttribute("textContent");
+                        isEqual = isEqual & v1.equals(v2);
+                    }
+                    if (isEqual) {
+                        featureNamesList.add(utils.getFeatureTitle(feature)); // add feature name to list
+                    }
+                    break;
+
+                case "":
+                    featureNamesList.add(utils.getFeatureTitle(feature)); // add feature name to list
+                    break;
             }
-            e1ement = row.findElements(By.cssSelector("span.group-table__option-name")); // row name
-            title = e1ement.get(0).getAttribute("textContent"); // w
-            if (isEqual) {
-                listEqual.add(title);
-            } else {
-                listDfifferent.add(title);
-            }
-
         }
-        utils.showDifferentPhoneSettings();
-
-        // scan rows
-        rows = driver.findElements(By.cssSelector("div.group-table__option-wrapper"));
-        List < String > listDfifferent2 = new ArrayList < > ();
-        for (int i = 0; i < rows.size(); i++) {
-            row = rows.get(i);
-            e1ement = row.findElements(By.cssSelector("span.group-table__option-name"));
-            listDfifferent2.add(e1ement.get(0).getAttribute("textContent"));
-        }
-
-        listEqual.retainAll(listDfifferent);
-        Assert.assertEquals("Перестали отображаться одинаковые параметры", listEqual.size(), 0);
+        return featureNamesList;
     }
 }

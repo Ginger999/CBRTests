@@ -20,7 +20,6 @@ public class TestBase {
     @Before
     public void start() {
         // if (tlApp.get() != null) {
-        //     System.out.println("********** TestBase tlApp.get() != null");
         //     app = tlApp.get();
         //     return;
         // }
