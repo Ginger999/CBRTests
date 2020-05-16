@@ -1,97 +1,35 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.WebElement;
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import io.qameta.allure.Step;
 
-
+@RunWith(DataProviderRunner.class)
 public class Test03 extends TestBase {
 
     @Test
-    public void TestPriceWithGauarantee() {
-        // open smartphones 2019
+    @UseDataProvider(value = "test03", location = DataProviders.class)
+    public void testPriceWithGauarantee(Filter filter) {
         app.smartfony2019PageOpen();
+        utils.setProductFilterValues(filter);
+        utils.applyFilterByShowButton(filter);
+        utils.getProductsAfterSearch().get(0).click();
 
-        // wait for the element - 'Наличие'
-        System.out.println("TestPriceWithGauarantee");
-        app.smartfony2019Page.utils.wait.until(presenceOfElementLocated(By.cssSelector("span.ui-collapse__link-text")));
+        String currentPrice = utils.getProductCurrentPrice();
 
-        // find section - 'Цена' and set values
-        List<String> valueOfPrice = Arrays.asList("27001");
-        app.smartfony2019Page.utils.setSectionValues("Цена", "radio", "data-min", valueOfPrice, false);
+        utils.selectProductGuarantee();
 
-        // find section - 'Производитель' and set values
-        List<String> valuesOfBrand = Arrays.asList("apple");
-        app.smartfony2019Page.utils.setSectionValues("Производитель", "check", "value", valuesOfBrand, true);
+        String totalPrice = utils.getProductTotalPrice();
+        String quarateePrice = utils.calcProductGuaranteeValue(currentPrice, totalPrice);
 
-        // find the 1st part of complex checkbox: element by it's value
-        String cssCheckProperty = "input.ui-checkbox__input.ui-checkbox__input_list[value='" + valuesOfBrand.get(0)
-                + "']";
+        allurePint(currentPrice, quarateePrice, totalPrice);
 
-        // find the 2nd part of complex checkbox: element to click
-        String xpathCheckClick = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @value='"
-                + valuesOfBrand.get(0) + "']/..";
-
-        clickAfterChecked(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
-
-        List<WebElement> phones = app.smartfony2019Page.utils.driver.findElements(By.cssSelector("div.product-info__title-link"));
-        phones.get(0).click();
-        WebElement price = app.smartfony2019Page.utils.driver.findElement(By.cssSelector("span.current-price-value[data-role*='current']"));
-        String phonePrice = price.getAttribute("data-price-value");
-
-        // select garantee
-        WebElement select = app.smartfony2019Page.utils.wait.until(visibilityOfElementLocated(By.cssSelector("select.form-control.select")));
-        Select garanteeList = new Select(select);
-        garanteeList.selectByIndex(1);
-        app.smartfony2019Page.utils.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
-        String totalPrice = price.getAttribute("textContent").replaceAll(" ", "");
-        float guarantee = Float.parseFloat(totalPrice) - Float.parseFloat(phonePrice);
-
-        System.out.println("Phone price: " + phonePrice + " Guarantee: " + guarantee + "Total price: " +  totalPrice);
     }
-
-    public void clickAfterChecked(String cssCheckProperty, String xpathCheckClick, String cssFloatButton) {
-        // find the 1st part of complex checkbox: element by it's value
-        WebElement btnCheckProperty = app.smartfony2019Page.utils.driver.findElement(By.cssSelector(cssCheckProperty));
-        app.smartfony2019Page.utils.actions.moveToElement(btnCheckProperty).build().perform();
-
-        // find the 2nd part of complex checkbox: element to click
-        WebElement btnCheckClick = app.smartfony2019Page.utils.driver.findElement(By.xpath(xpathCheckClick));
-
-        boolean isAppliedFloatButton = false;
-        boolean isChecked;
-        do{
-            // get attribute("checked")
-            try {
-                isChecked = btnCheckProperty.getAttribute("checked").equals("true");
-            } catch (Exception e) {
-                isChecked = false; // because attribute("checked") = null when checkbox is clear
-            }
-            if (!isChecked){
-                // click on the float button
-                try {
-                    btnCheckClick.click();
-                    app.smartfony2019Page.utils.wait.until(presenceOfElementLocated(By.cssSelector(cssFloatButton))).click();
-                    isAppliedFloatButton = true;
-                } catch (Exception e) {
-                    isAppliedFloatButton = false;
-                }
-                if (!isAppliedFloatButton) {
-                    btnCheckClick.click();
-                }
-            } else {
-                if (!isAppliedFloatButton) {
-                    btnCheckClick.click();
-                }
-            }
-        }
-        while (!isAppliedFloatButton);
+    // for allure
+    @Step("Print price of a phone with a guarantee")
+    private void allurePint(String currentPrice, String quarateeValue, String totalPrice) {
+        System.out.println("Phone price: " + currentPrice + " Guarantee: " + quarateeValue + " Total price: " + totalPrice);
     }
 }
