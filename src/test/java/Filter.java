@@ -9,7 +9,9 @@ public class Filter {
     private List<String> memoryValues;
     private List<String> memoryCaptions;
 
-    public static Builder newEntity() { return new Filter().new Builder(); }
+    public static Builder newEntity() {
+        return new Filter().new Builder();
+    }
 
     public String getFilterPrice() {
         return filterPrice;
@@ -26,6 +28,7 @@ public class Filter {
     public List<String> getBrandValues() {
         return brandValues;
     }
+
     public String getFilterMemory() {
         return filterMemory;
     }
@@ -40,8 +43,13 @@ public class Filter {
 
 
     public class Builder {
-        private Builder() {}
-        public Builder withFilterPrice(String filterPrice) { Filter.this.filterPrice = filterPrice; return this; }
+        private Builder() {
+        }
+
+        public Builder withFilterPrice(String filterPrice) {
+            Filter.this.filterPrice = filterPrice; return this;
+        }
+
         public Builder withPriceValues(List<String> priceValues) { Filter.this.priceValues = priceValues; return this; }
         public Builder withFilterBrand(String filterBrand) { Filter.this.filterBrand = filterBrand; return this; }
         public Builder withBrandValues(List<String> brandValues) { Filter.this.brandValues = brandValues; return this; }
