@@ -14,7 +14,8 @@ public class Test02 extends TestBase {
     @Test
     @UseDataProvider(value = "test02", location = DataProviders.class)
     public void testPhoneComparison(Filter filter) {
-        app.smartfony2019PageOpen();
+        //app.smartfony2019PageOpen();
+        utils.openSmartphones2019();
         utils.setProductFilterValues(filter);
         utils.applyFilterByApllyButton();
 
@@ -22,9 +23,9 @@ public class Test02 extends TestBase {
         int phonesCount = 2;
         utils.addProductsToCompare(phonesCount);
 
-        List < String > listOfEqual= getFeatureList(phonesCount, "equal");
+        List < String > listOfEqual = getFeatureList(phonesCount, "equal");
         utils.showDifferentProductSettings();
-        List<String> listOfDifference = getFeatureList(phonesCount, "");
+        List < String > listOfDifference = getFeatureList(phonesCount, "");
 
         listOfEqual.retainAll(listOfDifference); // get intersection list
 
@@ -39,8 +40,8 @@ public class Test02 extends TestBase {
         String v2;
         List < String > featureNamesList = new ArrayList < > ();
         boolean isEqual;
-        for (int i = 0; i < rows.size(); i++) {
-            feature = rows.get(i);
+        for (WebElement row: rows) {
+            feature = row;
             values = utils.getFeatureBlockValues(feature); // featureBlock values
             switch (kind) {
                 case "equal":

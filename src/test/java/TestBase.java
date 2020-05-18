@@ -1,5 +1,6 @@
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +17,21 @@ public class TestBase {
     public WebDriver driver;
     public WebDriverWait wait;
     public static Utils utils;
+
+    @BeforeClass
+    public static void setUpClass() {
+        String os = System.getProperty("os.name").toLowerCase();
+        switch (os) {
+            case "windows":
+                System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+                break;
+            case "linux":
+                System.setProperty("webdriver.chrome.driver", "chromedriver");
+                break;
+            default:
+                throw new IllegalArgumentException("Operating System: " + os + ", there is no webdriver for it!");
+        }
+    }
 
     @Before
     public void start() {

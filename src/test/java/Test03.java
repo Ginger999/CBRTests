@@ -12,14 +12,15 @@ public class Test03 extends TestBase {
     @Test
     @UseDataProvider(value = "test03", location = DataProviders.class)
     public void testPriceWithGauarantee(Filter filter) {
-        app.smartfony2019PageOpen();
+        //app.smartfony2019PageOpen();
+        utils.openSmartphones2019();
         utils.setProductFilterValues(filter);
         utils.applyFilterByShowButton(filter);
         utils.getProductsAfterSearch().get(0).click();
 
         String currentPrice = utils.getProductCurrentPrice();
 
-        utils.selectProductGuarantee();
+        utils.selectProductGuarantee("1 год");
 
         String totalPrice = utils.getProductTotalPrice();
         String quarateePrice = utils.calcProductGuaranteeValue(currentPrice, totalPrice);
@@ -29,7 +30,7 @@ public class Test03 extends TestBase {
     }
     // for allure
     @Step("Print price of a phone with a guarantee")
-    private void allurePint(String currentPrice, String quarateeValue, String totalPrice) {
-        System.out.println("Phone price: " + currentPrice + " Guarantee: " + quarateeValue + " Total price: " + totalPrice);
+    private void allurePint(String currentPrice, String quarateePrice, String totalPrice) {
+        System.out.println("Phone price: " + currentPrice + " Guarantee: " + quarateePrice + " Total price: " + totalPrice);
     }
 }

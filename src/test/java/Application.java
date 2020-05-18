@@ -13,7 +13,7 @@ public class Application {
     }
 
     public void quit(WebDriver driver) {
-        if (!(driver.equals(null))) {
+        if (driver != null) {
             driver.quit();
             driver = null;
         }
