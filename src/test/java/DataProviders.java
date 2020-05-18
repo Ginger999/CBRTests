@@ -34,5 +34,15 @@ public class DataProviders {
                         .build() },
         };
     }
+    @DataProvider
+    public static Object[][] test05() {
+        return new Object[][] {
+                { Filter.newEntity()
+                        .withFilterStock("Акция")
+                        .withStockValues(Collections.singletonList("tovarysoskidkoj0000"))
+                        .withStockCaptions(Collections.singletonList("Товары со скидкой"))
+                        .build() },
+        };
+    }
 
 }
