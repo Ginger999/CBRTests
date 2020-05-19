@@ -353,6 +353,16 @@ public class Utils {
         }
         return null;
     }
+
+    public List < WebElement > getAllElements(By locator) {
+        List < WebElement > elements = driver.findElements(locator);
+        if (elements.size() > 0) {
+            return wait.until(presenceOfAllElementsLocatedBy(locator));
+        } else {
+            return elements;
+        }
+    }
+
     public String getCssOfLeftMenuItem(String menuItemLabel) {
         // TO DO определять локаторы в  зависимости от уровня пункта меню
         switch (menuItemLabel) {
@@ -435,22 +445,16 @@ public class Utils {
     }
 
     public List < WebElement > getProductsAfterSearch() {
-        return driver.findElements(By.cssSelector("div.product-info__title-link"));
+        return getAllElements(By.cssSelector("div.product-info__title-link"));
     }
 
     public List < WebElement > getProductBlocks() {
-        By locator = By.cssSelector("div[data-id='product']");
-        List < WebElement > elements = driver.findElements(locator);
-        if (elements.size() > 0) {
-            return wait.until(presenceOfAllElementsLocatedBy(locator));
-        } else {
-            return elements;
-        }
+        return getAllElements(By.cssSelector("div[data-id='product']"));
     }
 
     /* Returns the list of feature blocks */
     public List < WebElement > getProductComparisonFeaturesBlocks() {
-        return driver.findElements(By.cssSelector("div.group-table__option-wrapper"));
+        return getAllElements(By.cssSelector("div.group-table__option-wrapper"));
     }
 
     public String getProductCurrentPrice() {
@@ -458,7 +462,7 @@ public class Utils {
     }
 
     private WebElement getProductPriceBlock() {
-        return driver.findElement(By.cssSelector("span.current-price-value[data-role*='current']"));
+        return wait.until(presenceOfElementLocated(By.cssSelector("span.current-price-value[data-role*='current']")));
     }
 
     public String getProductTotalPrice() {
@@ -473,14 +477,9 @@ public class Utils {
     }
 
     public List < WebElement > getStockPins() {
-        By locator = By.cssSelector("div.vobler");
-        List < WebElement > elements = driver.findElements(locator);
-        if (elements.size() > 0) {
-            return wait.until(presenceOfAllElementsLocatedBy(locator));
-        } else {
-            return elements;
-        }
+        return getAllElements(By.cssSelector("div.vobler"));
     }
+
     /* Retuns true if Text contains one of the value from the List of values */
     public boolean hasOneOfValues(String Text, List < String > values) {
         for (String value: values) {
