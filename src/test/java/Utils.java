@@ -1,26 +1,20 @@
+import io.qameta.allure.Step;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import io.qameta.allure.Step;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import static org.openqa.selenium.support.ui.ExpectedConditions.attributeToBe;
-import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
-import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
-import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBeMoreThan;
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllElementsLocatedBy;
-import static org.openqa.selenium.support.ui.ExpectedConditions.stalenessOf;
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+
+
 
 public class Utils {
     public WebDriver driver;
@@ -42,10 +36,10 @@ public class Utils {
         // add products to compare
         String cssProducts = "label.ui-checkbox[data-commerce-target='CATALOG_PRODUCT_COMPARE']";
 
-        List < WebElement > products = driver.findElements(By.cssSelector(cssProducts));
+        List<WebElement> products = wait
+            .until(numberOfElementsToBeMoreThan(By.cssSelector(cssProducts), phoneNumberToCompare));
         // add products to compare
         for (int p = 0; p < phoneNumberToCompare; p++) {
-            products = driver.findElements(By.cssSelector(cssProducts));
             products.get(p).click();
             // wait number of 'Сравнить' buttons
             wait.until(numberOfElementsToBe(By.cssSelector("label.ui-checkbox.popover-wrapper"), p + 1));
@@ -65,8 +59,9 @@ public class Utils {
 
     /* Clicks on 'Применить' button */
     public void applyFilterByApllyButton() {
-        WebElement btnFilter = isSubElementFoundedAfterScrolling(null, "button.button-ui.button-ui_brand.left-filters__button",
-            "textContent", "Применить", "startsWith");
+        WebElement btnFilter = isSubElementFoundedAfterScrolling(null,
+                "button.button-ui.button-ui_brand.left-filters__button",
+                "textContent", "Применить", "startsWith");
         if (btnFilter != null) {
             actions.moveToElement(btnFilter).build().perform();
             btnFilter.click();
@@ -98,7 +93,7 @@ public class Utils {
 
         // find the 2nd part of complex checkbox: element to click
         String xpathCheckClick = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @value='" +
-            attributeValue + "']/..";
+                attributeValue + "']/..";
 
         clickShowButton(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
     }
@@ -128,11 +123,7 @@ public class Utils {
             if (btnCheckProperty.getAttribute("checked") == null) {
                 isChecked = false;
             } else {
-                if (btnCheckProperty.getAttribute("checked").equals("true")) {
-                    isChecked = true;
-                } else {
-                    isChecked = false;
-                }
+                isChecked = btnCheckProperty.getAttribute("checked").equals("true");
             }
             if (!isChecked) {
                 btnCheckClick.click();
@@ -157,15 +148,15 @@ public class Utils {
 
     @Step("Choose city")
     public void chooseCity(String city) {
-        List < WebElement > cityPopups = driver.findElements(By.className("confirm-city-mobile"));
+        List<WebElement> cityPopups = driver.findElements(By.className("confirm-city-mobile"));
         if (cityPopups.size() > 0) {
             WebElement cityPopup = cityPopups.get(0);
             if (isSubElementPresent(null, By.cssSelector("a.w-choose-city-widget.pseudo-link.pull-right"))) {
                 wait.until(elementToBeClickable(By.cssSelector("a.w-choose-city-widget.pseudo-link.pull-right")))
-                    .click();
+                        .click();
                 // input a city name
                 wait.until(presenceOfElementLocated(By.cssSelector("input.form-control")))
-                    .sendKeys(Keys.HOME + city + Keys.ENTER);
+                        .sendKeys(Keys.HOME + city + Keys.ENTER);
             }
             // wait: city popup will disappear
             wait.until(stalenessOf(cityPopup));
@@ -180,9 +171,9 @@ public class Utils {
        using driver or an element as a root to search.
     */
     public WebElement isSubElementFoundedAfterScrolling(WebElement rootElement, String cssElements,
-        String attributeName, String attributeValue, String comparison) {
-        List < WebElement > elements;
-        WebElement currentElement = null;
+                                                        String attributeName, String attributeValue, String comparison) {
+        List<WebElement> elements;
+        WebElement currentElement;
         int scroll_max = 6; // max number of scrolling attempts to find the ellement
         int scroll_index = 0;
 
@@ -265,14 +256,16 @@ public class Utils {
         }
 
         // find section by sectionName
-        WebElement section = isSubElementFoundedAfterScrolling(null, ".ui-collapse.ui-collapse_list", "textContent", sectionName,
-            "startsWith");
+        WebElement section = isSubElementFoundedAfterScrolling(null,
+                ".ui-collapse.ui-collapse_list", "textContent", sectionName,
+                "startsWith");
 
         // do actions if a section exists
         if (section != null) {
             // open section
-            WebElement btnCollapse = isSubElementFoundedAfterScrolling(section, "span.ui-collapse__link-text", "textContent",
-                sectionName, "equals");
+            WebElement btnCollapse = isSubElementFoundedAfterScrolling(section,
+                    "span.ui-collapse__link-text", "textContent",
+                    sectionName, "equals");
 
             if (btnCollapse != null) {
                 if (isSubElementPresent(section,
@@ -283,7 +276,7 @@ public class Utils {
             // open all section values
             if (isShowAllButton) {
                 WebElement btnShowAll = isSubElementFoundedAfterScrolling(section,
-                    "i.ui-list-controls__icon.ui-list-controls__icon_down", "", "", "");
+                        "i.ui-list-controls__icon.ui-list-controls__icon_down", "", "", "");
                 if (btnShowAll != null) {
                     btnShowAll.click();
                 }
@@ -298,12 +291,11 @@ public class Utils {
                 value = sectionValue;
                 locator = "input.ui-checkbox__input.ui-checkbox__input_list[" + attributeName + "='" + value + "']";
                 xpath = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @" +
-                    attributeName + "='" + value + "']/..";
+                        attributeName + "='" + value + "']/..";
 
-                switch (buttonType) {
-                    case "radio":
-                        locator = locator.replace("checkbox", "radio");
-                        xpath = xpath.replace("checkbox", "radio");
+                if ("radio".equals(buttonType)) {
+                    locator = locator.replace("checkbox", "radio");
+                    xpath = xpath.replace("checkbox", "radio");
                 }
                 // mark button
                 setCheckValue(section, locator, xpath, attributeName, value);
@@ -323,7 +315,7 @@ public class Utils {
     }
 
     public WebElement getActiveNextPageButton() {
-        List < WebElement > pages = getPaginationButtons(); // refresh pagination element
+        List<WebElement> pages = getPaginationButtons(); // refresh pagination element
         if (pages.size() > 0) {
             // WebElement btnFilter = isSubElementFoundedAfterScrolling(null, "a.pagination-widget__page-link",
             //     "textContent", "", "startsWith");
@@ -340,22 +332,22 @@ public class Utils {
             if (driver.findElements(By.cssSelector("a.pagination-widget__page-link")).size() > 0) {
                 wait.until(presenceOfAllElementsLocatedBy(By.cssSelector("a.pagination-widget__page-link")));
                 nextPageButtonDetails = pages.get(nextPageButtonIndex)
-                    .findElement(By.cssSelector("a.pagination-widget__page-link"));
+                        .findElement(By.cssSelector("a.pagination-widget__page-link"));
             } else {
                 throw new IllegalArgumentException("WTF?");
             }
 
             // check is '>' button is enabled
             if (!pages.get(lastPageIndex).getAttribute("className").contains("active") &
-                !nextPageButtonDetails.getAttribute("className").contains("disabled")) {
+                    !nextPageButtonDetails.getAttribute("className").contains("disabled")) {
                 return pages.get(nextPageButtonIndex);
             }
         }
         return null;
     }
 
-    public List < WebElement > getAllElements(By locator) {
-        List < WebElement > elements = driver.findElements(locator);
+    public List<WebElement> getAllElements(By locator) {
+        List<WebElement> elements = driver.findElements(locator);
         if (elements.size() > 0) {
             return wait.until(presenceOfAllElementsLocatedBy(locator));
         } else {
@@ -371,7 +363,6 @@ public class Utils {
             case "Смартфоны":
                 return "a.ui-link.menu-desktop__second-level";
             case "2019 года":
-                return "a.ui-link.menu-desktop__popup-link";
             case "С большим аккумулятором":
                 return "a.ui-link.menu-desktop__popup-link";
             default:
@@ -380,7 +371,7 @@ public class Utils {
     }
 
     /* Returns the list of feature values within one feature block */
-    public List < WebElement > getFeatureBlockValues(WebElement featureBlock) {
+    public List<WebElement> getFeatureBlockValues(WebElement featureBlock) {
         return featureBlock.findElements(By.cssSelector("div.group-table__data>p"));
     }
 
@@ -389,10 +380,10 @@ public class Utils {
         return featureBlock.findElement(By.cssSelector("span.group-table__option-name")).getAttribute("textContent");
     }
 
-    public WebElement getLeftMenuItem(List < String > menuItems) {
+    public WebElement getLeftMenuItem(List<String> menuItems) {
         String cssMenuItem;
 
-        List < WebElement > els;
+        List<WebElement> els;
         for (int i = 0; i < menuItems.size(); i++) {
             cssMenuItem = getCssOfLeftMenuItem(menuItems.get(i));
             els = wait.until(numberOfElementsToBeMoreThan(By.cssSelector(cssMenuItem), 2));
@@ -425,9 +416,9 @@ public class Utils {
     }
 
     /* Returns page buttons after search */
-    public List < WebElement > getPaginationButtons() {
+    public List<WebElement> getPaginationButtons() {
         By cssSelector = By.cssSelector("li.pagination-widget__page");
-        List < WebElement > elements = driver.findElements(cssSelector);
+        List<WebElement> elements = driver.findElements(cssSelector);
         if (elements.size() > 0) {
             return wait.until(presenceOfAllElementsLocatedBy(cssSelector));
         } else {
@@ -435,25 +426,16 @@ public class Utils {
         }
     }
 
-    /* Returns number of page buttons after search */
-    public int getPaginationButtonsCount(List < WebElement > pages) {
-        if (pages.size() > 0) {
-            return pages.size() - 4; // pages.size() - number of navigation buttons
-        } else {
-            return 1;
-        }
-    }
-
-    public List < WebElement > getProductsAfterSearch() {
+    public List<WebElement> getProductsAfterSearch() {
         return getAllElements(By.cssSelector("div.product-info__title-link"));
     }
 
-    public List < WebElement > getProductBlocks() {
+    public List<WebElement> getProductBlocks() {
         return getAllElements(By.cssSelector("div[data-id='product']"));
     }
 
     /* Returns the list of feature blocks */
-    public List < WebElement > getProductComparisonFeaturesBlocks() {
+    public List<WebElement> getProductComparisonFeaturesBlocks() {
         return getAllElements(By.cssSelector("div.group-table__option-wrapper"));
     }
 
@@ -468,7 +450,8 @@ public class Utils {
     public String getProductTotalPrice() {
         return getProductPriceBlock().getAttribute("textContent").replaceAll(" ", "");
     }
-    public List < String > getSmartphones2019MenuPath() {
+
+    public List<String> getSmartphones2019MenuPath() {
         return Arrays.asList("Смартфоны и гаджеты", "Смартфоны", "2019 года");
     }
 
@@ -479,10 +462,9 @@ public class Utils {
     public List < WebElement > getStockPins() {
         return getAllElements(By.cssSelector("div.vobler"));
     }
-
     /* Retuns true if Text contains one of the value from the List of values */
-    public boolean hasOneOfValues(String Text, List < String > values) {
-        for (String value: values) {
+    public boolean hasOneOfValues(String Text, List<String> values) {
+        for (String value : values) {
             if (Text.toUpperCase().contains(value.toUpperCase())) {
                 return true;
             }
@@ -492,7 +474,7 @@ public class Utils {
 
     /* Clicks on the check/radio buttons which have specified values */
     public void setCheckValue(WebElement sectionElement, String locator, String xpath, String attribute,
-        String value) {
+                              String value) {
         // find the button wich has a specidfied value
         WebElement element = isSubElementFoundedAfterScrolling(sectionElement, locator, attribute, value, "equals");
         // click on the clickabele part of the button
@@ -535,7 +517,7 @@ public class Utils {
 
 
     @Step("Open menu item")
-    public void openLeftMenu(List < String > menuItems) {
+    public void openLeftMenu(List<String> menuItems) {
         driver.manage().timeouts().implicitlyWait(TestBase.TIME_I_WAIT_MAXIMUM, TimeUnit.MILLISECONDS);
         wait.until(numberOfElementsToBeMoreThan(By.cssSelector("div.menu-desktop__root-info"), 2));
         WebElement leftMenuItem = getLeftMenuItem(menuItems);

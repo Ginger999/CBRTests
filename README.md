@@ -2,7 +2,7 @@
 ИСПОЛЬЗОВАНЫ:
 Java + Apache Maven + Selenium + Junit4 + Yandex Allure
 
-WebDriver: chromedriver (файлы)
+WebDriver: chromedriver (файлы для ОС Windows/Linux находятся в папке проекта)
 
 
 ИНСТРУКЦИЯ по использованию тестов:

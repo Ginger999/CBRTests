@@ -1,20 +1,18 @@
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.openqa.selenium.WebElement;
-
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(DataProviderRunner.class)
 public class Test02 extends TestBase {
     @Test
     @UseDataProvider(value = "test02", location = DataProviders.class)
     public void testPhoneComparison(Filter filter) {
-        //app.smartfony2019PageOpen();
         utils.openSmartphones2019();
         utils.setProductFilterValues(filter);
         utils.applyFilterByApllyButton();
@@ -23,24 +21,24 @@ public class Test02 extends TestBase {
         int phonesCount = 2;
         utils.addProductsToCompare(phonesCount);
 
-        List < String > listOfEqual = getFeatureList(phonesCount, "equal");
+        List<String> listOfEqual = getFeatureList(phonesCount, "equal");
         utils.showDifferentProductSettings();
-        List < String > listOfDifference = getFeatureList(phonesCount, "");
+        List<String> listOfDifference = getFeatureList(phonesCount, "");
 
         listOfEqual.retainAll(listOfDifference); // get intersection list
 
         Assert.assertEquals("Перестали отображаться одинаковые параметры", listOfEqual.size(), 0);
     }
 
-    private List < String > getFeatureList(int phonesCount, String kind) {
-        List < WebElement > rows = utils.getProductComparisonFeaturesBlocks();
+    private List<String> getFeatureList(int phonesCount, String kind) {
+        List<WebElement> rows = utils.getProductComparisonFeaturesBlocks();
         WebElement feature;
-        List < WebElement > values;
+        List<WebElement> values;
         String v1;
         String v2;
-        List < String > featureNamesList = new ArrayList < > ();
+        List<String> featureNamesList = new ArrayList<>();
         boolean isEqual;
-        for (WebElement row: rows) {
+        for (WebElement row : rows) {
             feature = row;
             values = utils.getFeatureBlockValues(feature); // featureBlock values
             switch (kind) {

@@ -14,14 +14,12 @@ public class Page {
     public Page(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
-        //
+
         defaultCity = "Томск";
         baseUrl = "https://dns-shop.ru";
         baseUrlTitle = "DNS – интернет магазин цифровой и бытовой техники по доступным ценам.";
-        //
 
         utils = new Utils(driver, wait);
-
         utils.openPage(baseUrl, baseUrlTitle);
         utils.chooseCity(defaultCity);
     }
