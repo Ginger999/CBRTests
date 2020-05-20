@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(DataProviderRunner.class)
 public class Test03 extends TestBase {
-    @Description("Gets the price of the phone and the cost of the guarantee")
+    @Description("Проверяет, что цена на смартфон изменилась, если выбрать с гарантией. Выводит в отчет цену телефона, стоимость гарантии.")
     @Test
     @UseDataProvider(value = "test03", location = DataProviders.class)
     public void testPriceWithGauarantee(Filter filter) {

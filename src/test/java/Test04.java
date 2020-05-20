@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import io.qameta.allure.Description;
 
 public class Test04 extends TestBase {
-    @Description("Compares the number of phones indicated in the menu item and the number of products on the pages")
+    @Description("Сравнивет количество телефонов, указанных в пункте меню с суммарным количеством телефонов на страницах.")
     @Test
     public void testPopupItemCount() {
         // Select menu path

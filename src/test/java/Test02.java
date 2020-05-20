@@ -12,7 +12,7 @@ import java.util.List;
 
 @RunWith(DataProviderRunner.class)
 public class Test02 extends TestBase {
-    @Description("Compares two phones and checks that only difference phone features are shown when choosing 'Only differing'")
+    @Description("Выбирает для срвнения два телефона, проверяет, что перестали отображаться одинаковые параметры, если установить опцию 'Только различающиеся'.")
     @Test
     @UseDataProvider(value = "test02", location = DataProviders.class)
     public void testPhoneComparison(Filter filter) {

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RunWith(DataProviderRunner.class)
 public class Test01 extends TestBase {
-    @Description("Tests that each product in the list contains only filter values")
+    @Description("Проверяет, что выборка соответствует заданным фильтрам.")
     @Test
     @UseDataProvider(value = "test01", location = DataProviders.class)
     public void testFilter(Filter filter) {

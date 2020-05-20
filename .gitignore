@@ -16,4 +16,3 @@ buildNumber.properties
 .vscode
 
 src/main/java/Notes.java
-src/test/java/Test05.java
