@@ -5,18 +5,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebElement;
 
+import io.qameta.allure.Description;
+
 import java.util.List;
 
 
 @RunWith(DataProviderRunner.class)
 public class Test01 extends TestBase {
-
+    @Description("Tests that each product in the list contains only filter values")
     @Test
     @UseDataProvider(value = "test01", location = DataProviders.class)
     public void testFilter(Filter filter) {
-        utils.openSmartphones2019();
-        utils.setProductFilterValues(filter); // set  filter values to filter phones
-        utils.applyFilterByApllyButton(); // aply filter using 'Приметить' button
+        utils.openMenuSmartphones2019();
+        utils.setFilterValues(filter); // set  filter values to filter phones
+        utils.filterByApllyButton(); // aply filter using 'Приметить' button
 
         List<WebElement> phones;
         String phonesContent;
@@ -24,7 +26,7 @@ public class Test01 extends TestBase {
         // check asserts for each page
         do {
 
-            phones = utils.getProductBlocks();
+            phones = utils.getListPageProductBlocks();
             for (WebElement phone : phones) {
                 phonesContent = phone.getAttribute("textContent");
 
@@ -37,8 +39,8 @@ public class Test01 extends TestBase {
                         utils.hasOneOfValues(phonesContent, filter.getMemoryCaptions()));
             }
             // the next page
-            nextPageButton = utils.getActiveNextPageButton();
-            utils.paginationNextPageClick(nextPageButton);
+            nextPageButton = utils.getEnableNextPageButton();
+            utils.clickNextPage(nextPageButton);
         } while (nextPageButton != null);
     }
 }

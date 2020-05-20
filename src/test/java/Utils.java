@@ -14,8 +14,6 @@ import java.util.regex.Pattern;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
-
-
 public class Utils {
     public WebDriver driver;
     private WebDriverWait wait;
@@ -27,15 +25,20 @@ public class Utils {
         actions = new Actions(driver);
     }
 
-    public void dragAndDrop(WebElement drag, WebElement drop) {
+    public void actionDragAndDrop(WebElement drag, WebElement drop) {
         new Actions(driver).moveToElement(drag).clickAndHold().moveToElement(drop).release().perform();
     }
 
+    public void actionOpenLinlInNewTab(WebElement element, int numberOfWIndows) {
+        new Actions(driver).moveToElement(element).keyDown(Keys.CONTROL).keyDown(Keys.SHIFT).click(element)
+                .keyUp(Keys.CONTROL).keyUp(Keys.SHIFT).perform();
+        wait.until(numberOfWindowsToBe(numberOfWIndows));
+    }
+
     @Step("Adds products to compare")
-    public void addProductsToCompare(int phoneNumberToCompare) {
+    public void addListPageProductsToCompare(int phoneNumberToCompare) {
         // add products to compare
         String cssProducts = "label.ui-checkbox[data-commerce-target='CATALOG_PRODUCT_COMPARE']";
-
         List<WebElement> products = wait
             .until(numberOfElementsToBeMoreThan(By.cssSelector(cssProducts), phoneNumberToCompare));
         // add products to compare
@@ -48,7 +51,6 @@ public class Utils {
             }
             findItemPerformClick(cssProducts, true, false);
         }
-        //findItemPerformClick(cssProducts, true, false);
         // press the button 'Сравнить'
         driver.findElements(By.cssSelector("a.button-ui.button-ui_brand[href*='/compare/'")).get(0).click();
 
@@ -57,49 +59,8 @@ public class Utils {
         driver.manage().timeouts().implicitlyWait(TestBase.TIME_I_WAIT_DEFAULT, TimeUnit.MILLISECONDS);
     }
 
-    /* Clicks on 'Применить' button */
-    public void applyFilterByApllyButton() {
-        WebElement btnFilter = isSubElementFoundedAfterScrolling(null,
-                "button.button-ui.button-ui_brand.left-filters__button",
-                "textContent", "Применить", "startsWith");
-        if (btnFilter != null) {
-            actions.moveToElement(btnFilter).build().perform();
-            btnFilter.click();
-        }
-    }
-
-    /* Clicks on 'Показать' button */
-    public void applyFilterByShowButton2(String attributeValue) {
-        // TO DO выбор не только по getBrandValues, сделать унивесальным
-        //String attributeValue = filter.getBrandValues().get(0);
-
-        // find the 1st part of complex checkbox: element by it's value
-        String cssCheckProperty = "input.ui-checkbox__input.ui-checkbox__input_list[value='" + attributeValue + "']";
-
-        // find the 2nd part of complex checkbox: element to click
-        String xpathCheckClick = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @value='" +
-            attributeValue + "']/..";
-
-        clickShowButton(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
-    }
-
-    /* Clicks on 'Показать' button */
-    public void applyFilterByShowButton(Filter filter) {
-        // TO DO выбор не только по getBrandValues, сделать унивесальным
-        String attributeValue = filter.getBrandValues().get(0);
-
-        // find the 1st part of complex checkbox: element by it's value
-        String cssCheckProperty = "input.ui-checkbox__input.ui-checkbox__input_list[value='" + attributeValue + "']";
-
-        // find the 2nd part of complex checkbox: element to click
-        String xpathCheckClick = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @value='" +
-                attributeValue + "']/..";
-
-        clickShowButton(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
-    }
-
-    /* Returns the calculated product guarantee value */
-    public String calcProductGuaranteeValue(String currentPrice, String totalPrice) {
+     /* Returns the calculated product guarantee value */
+    public String calcProductPageGuaranteeValue(String currentPrice, String totalPrice) {
         return Float.toString(Float.parseFloat(totalPrice) - Float.parseFloat(currentPrice));
     }
 
@@ -209,9 +170,7 @@ public class Utils {
                         }
                 }
             }
-            if (scroll_index < scroll_max) {
-                actions.sendKeys(Keys.PAGE_DOWN).perform();
-            }
+            actions.sendKeys(Keys.PAGE_DOWN).perform();
             scroll_index++;
         }
         return null;
@@ -224,6 +183,29 @@ public class Utils {
         } else {
             return rootElement.findElements(locator).size() > 0;
         }
+    }
+
+    /* Clicks on 'Применить' button */
+    public void filterByApllyButton() {
+        WebElement btnFilter = isSubElementFoundedAfterScrolling(null,
+                "button.button-ui.button-ui_brand.left-filters__button",
+                "textContent", "Применить", "startsWith");
+        if (btnFilter != null) {
+            actions.moveToElement(btnFilter).build().perform();
+            btnFilter.click();
+        }
+    }
+
+    /* Clicks on 'Показать' button */
+    public void filterByShowButton(String attributeValue) {
+        // find the 1st part of complex checkbox: element by it's value
+        String cssCheckProperty = "input.ui-checkbox__input.ui-checkbox__input_list[value='" + attributeValue + "']";
+
+        // find the 2nd part of complex checkbox: element to click
+        String xpathCheckClick = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @value='"
+                + attributeValue + "']/..";
+
+        clickShowButton(cssCheckProperty, xpathCheckClick, "div.apply-filters-float-btn");
     }
 
     /* Finds Section and marks buttons which have specified values */
@@ -314,12 +296,10 @@ public class Utils {
         }
     }
 
-    public WebElement getActiveNextPageButton() {
+    /*  Returns the next page clickable element */
+    public WebElement getEnableNextPageButton() {
         List<WebElement> pages = getPaginationButtons(); // refresh pagination element
         if (pages.size() > 0) {
-            // WebElement btnFilter = isSubElementFoundedAfterScrolling(null, "a.pagination-widget__page-link",
-            //     "textContent", "", "startsWith");
-
             // move to pagination element
             actions.moveToElement(pages.get(0)).build().perform();
             // get index of '>' button
@@ -346,6 +326,7 @@ public class Utils {
         return null;
     }
 
+    /* Tries to recieve all elements if it is possible */
     public List<WebElement> getAllElements(By locator) {
         List<WebElement> elements = driver.findElements(locator);
         if (elements.size() > 0) {
@@ -355,8 +336,8 @@ public class Utils {
         }
     }
 
-    public String getCssOfLeftMenuItem(String menuItemLabel) {
-        // TO DO определять локаторы в  зависимости от уровня пункта меню
+    /* Returns css selector of the left menu item */
+    public String getMenuItemCss(String menuItemLabel) {
         switch (menuItemLabel) {
             case "Смартфоны и гаджеты":
                 return "a.ui-link.menu-desktop__root-title";
@@ -380,14 +361,15 @@ public class Utils {
         return featureBlock.findElement(By.cssSelector("span.group-table__option-name")).getAttribute("textContent");
     }
 
+    /* Returns the last item in the menu items chain */
     public WebElement getLeftMenuItem(List<String> menuItems) {
         String cssMenuItem;
 
         List<WebElement> els;
         for (int i = 0; i < menuItems.size(); i++) {
-            cssMenuItem = getCssOfLeftMenuItem(menuItems.get(i));
+            cssMenuItem = getMenuItemCss(menuItems.get(i));
             els = wait.until(numberOfElementsToBeMoreThan(By.cssSelector(cssMenuItem), 2));
-            for (WebElement element: els) {
+            for (WebElement element : els) {
                 if (element.getAttribute("textContent").toLowerCase().contains(menuItems.get(i).toLowerCase())) {
                     actions.moveToElement(element).build().perform();
                     if (i == menuItems.size() - 1) {
@@ -400,7 +382,8 @@ public class Utils {
         return null;
     }
 
-    public int getProductCountInMenu(List < String > menuItems) {
+    /* Returns the count of products contained in the menu item */
+    public int getMenuItemProductCount(List < String > menuItems) {
         WebElement leftMenuItem = getLeftMenuItem(menuItems);
         if (leftMenuItem != null) {
             String popupCount = leftMenuItem.findElement(By.cssSelector("span.menu-desktop__popup-count"))
@@ -410,12 +393,11 @@ public class Utils {
             } else {
                 return 0;
             }
-            //return  Integer.parseInt(leftMenuItem.getAttribute("textContent").replace(menuItems.get(menuItems.size()-1), ""));
         }
         return 0;
     }
 
-    /* Returns page buttons after search */
+    /* Returns pagination buttons after search */
     public List<WebElement> getPaginationButtons() {
         By cssSelector = By.cssSelector("li.pagination-widget__page");
         List<WebElement> elements = driver.findElements(cssSelector);
@@ -426,42 +408,65 @@ public class Utils {
         }
     }
 
-    public List<WebElement> getProductsAfterSearch() {
-        return getAllElements(By.cssSelector("div.product-info__title-link"));
+    /* Returns product price without a stock */
+    public WebElement getProductListPriceNonStock(WebElement productBlock) {
+        return productBlock.findElement(By.cssSelector("span.product-price__previous-total"));
     }
 
-    public List<WebElement> getProductBlocks() {
+    /* Returns product price with a stock */
+    public WebElement getProductListPriceWithStock(WebElement productBlock) {
+        return productBlock.findElement(By.cssSelector("div.product-price__current"));
+    }
+
+    /* Returns product blocks on the page after search */
+    public List<WebElement> getListPageProductBlocks() {
         return getAllElements(By.cssSelector("div[data-id='product']"));
     }
 
     /* Returns the list of feature blocks */
-    public List<WebElement> getProductComparisonFeaturesBlocks() {
+    public List<WebElement> getProductPageComparisonFeaturesBlocks() {
         return getAllElements(By.cssSelector("div.group-table__option-wrapper"));
     }
 
-    public String getProductCurrentPrice() {
-        return getProductPriceBlock().getAttribute("data-price-value").replaceAll(" ", "");
+    /* Returns the list of feature blocks */
+    public String getProductPageCurrentPrice() {
+        return getProductPagePriceBlock().getAttribute("data-price-value").replaceAll(" ", "");
     }
 
-    private WebElement getProductPriceBlock() {
+    /* Returns the count of products contained in the menu item */
+    public List<WebElement> getProductListLinks() {
+        return getAllElements(By.cssSelector("a.ui-link[data-role='clamped-link']"));
+    }
+
+    /* Returns the first clickable link of product on the page after search starting from the root element*/
+    public WebElement getProductLink(WebElement element) {
+        return wait.until(elementToBeClickable(element.findElement(By.cssSelector("a.ui-link[data-role='clamped-link']"))));
+    }
+
+    public Float getNumPrice(String price) {
+        return Float.parseFloat(price.replaceAll(" ", ""));
+    }
+
+    /* Returns the product price contained in the product block on the product page*/
+    private WebElement getProductPagePriceBlock() {
         return wait.until(presenceOfElementLocated(By.cssSelector("span.current-price-value[data-role*='current']")));
     }
 
-    public String getProductTotalPrice() {
-        return getProductPriceBlock().getAttribute("textContent").replaceAll(" ", "");
+    /* Returns product total price: product price plus guaratee value */
+    public String getProductPageTotalPrice() {
+        return getProductPagePriceBlock().getAttribute("textContent").replaceAll(" ", "");
     }
 
-    public List<String> getSmartphones2019MenuPath() {
+    /* Returns a specified menu path */
+    public List<String> getMenuPathOfSmartphones2019() {
         return Arrays.asList("Смартфоны и гаджеты", "Смартфоны", "2019 года");
     }
 
-    public List < String > getSmartphonesLargeBattryMenuPath() {
+    /* Returns a specified menu path */
+    public List < String > getMenuPathOfSmartphonesLargeBattry() {
         return Arrays.asList("Смартфоны и гаджеты", "Смартфоны", "С большим аккумулятором");
     }
 
-    public List < WebElement > getStockPins() {
-        return getAllElements(By.cssSelector("div.vobler"));
-    }
     /* Retuns true if Text contains one of the value from the List of values */
     public boolean hasOneOfValues(String Text, List<String> values) {
         for (String value : values) {
@@ -485,7 +490,7 @@ public class Utils {
     }
 
     /* Sets the complex filter for the product */
-    public void setProductFilterValues(Filter filter) {
+    public void setFilterValues(Filter filter) {
         if (filter.getFilterPrice() != null) {
             filterOneSection(filter.getFilterPrice(), filter.getPriceValues());
         }
@@ -511,10 +516,8 @@ public class Utils {
 
     public void showDifferentProductSettings() {
         // slider
-        // TO DO check the current slider state
-        driver.findElement(By.cssSelector("span.base-ui-toggle__icon")).click();
+        wait.until(elementToBeClickable(By.cssSelector("span.base-ui-toggle__icon"))).click();
     }
-
 
     @Step("Open menu item")
     public void openLeftMenu(List<String> menuItems) {
@@ -527,7 +530,6 @@ public class Utils {
         // wait for the element - 'Наличие'
         wait.until(presenceOfElementLocated(By.cssSelector("span.ui-collapse__link-text")));
         driver.manage().timeouts().implicitlyWait(TestBase.TIME_I_WAIT_DEFAULT, TimeUnit.MILLISECONDS);
-
     }
 
     @Step("Open page")
@@ -537,12 +539,13 @@ public class Utils {
         wait.until(numberOfElementsToBeMoreThan(By.cssSelector("div.menu-desktop__root-info"), 2));
     }
 
-    public void openSmartphones2019() {
-        openLeftMenu(getSmartphones2019MenuPath());
+    /* Follows a specifed menu path and open the last item */
+    public void openMenuSmartphones2019() {
+        openLeftMenu(getMenuPathOfSmartphones2019());
     }
 
     /* Clicks on the next page button */
-    public void paginationNextPageClick(WebElement nextPageButton) {
+    public void clickNextPage(WebElement nextPageButton) {
         //WebElement nextPageButton = getNextPageButton();
         if (nextPageButton != null) {
             nextPageButton.click();

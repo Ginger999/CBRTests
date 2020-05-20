@@ -8,10 +8,6 @@ public class Application {
         smartfony2019Page = new Smartfony2019Page(driver, wait);
     }
 
-    public void smartfony2019PageOpen() {
-        smartfony2019Page.open();
-    }
-
     public void quit(WebDriver driver) {
         if (driver != null) {
             driver.quit();

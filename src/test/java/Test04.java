@@ -5,16 +5,19 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
+import io.qameta.allure.Description;
+
 public class Test04 extends TestBase {
+    @Description("Compares the number of phones indicated in the menu item and the number of products on the pages")
     @Test
     public void testPopupItemCount() {
         // Select menu path
         List<String> menuPath;
-        //menuPath = utils.getSmartphones2019MenuPath();
-        menuPath = utils.getSmartphonesLargeBattryMenuPath();
+        //menuPath = utils.getMenuPathOfSmartphones2019();
+        menuPath = utils.getMenuPathOfSmartphonesLargeBattry();
 
         // get count of products from menu item label
-        int productCountInMenu = utils.getProductCountInMenu(menuPath);
+        int productCountInMenu = utils.getMenuItemProductCount(menuPath);
         // open menu path
         utils.openLeftMenu(menuPath);
 
@@ -25,10 +28,10 @@ public class Test04 extends TestBase {
         List<WebElement> phones;
         driver.manage().timeouts().implicitlyWait(150, TimeUnit.MILLISECONDS);
         do {
-            phones = utils.getProductBlocks();
+            phones = utils.getListPageProductBlocks();
             productCountOnPages = productCountOnPages + phones.size();
-            nextPageButton = utils.getActiveNextPageButton();
-            utils.paginationNextPageClick(nextPageButton);
+            nextPageButton = utils.getEnableNextPageButton();
+            utils.clickNextPage(nextPageButton);
         } while (nextPageButton != null);
 
         // check asserts for number of smartphones
