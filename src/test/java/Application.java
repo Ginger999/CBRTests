@@ -2,10 +2,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Application {
-    public Smartfony2019Page smartfony2019Page;
+    public ProductPage productPage;
 
     public Application(WebDriver driver, WebDriverWait wait) {
-        smartfony2019Page = new Smartfony2019Page(driver, wait);
+        productPage = new ProductPage(driver, wait);
     }
 
     public void quit(WebDriver driver) {
