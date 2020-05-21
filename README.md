@@ -2,8 +2,8 @@
 ИСПОЛЬЗОВАНЫ:
 Java + Apache Maven + Selenium + Junit4 + Yandex Allure
 
+Browser Google Chrome Version 77.0.3865.90 (Official Build) (64-bit)
 WebDriver: chromedriver (файлы для ОС Windows/Linux находятся в папке проекта)
-
 
 ИНСТРУКЦИЯ по использованию тестов:
 1. Открыть консоль
