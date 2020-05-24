@@ -1,10 +1,16 @@
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+package tests;
+
+import app.Application;
+import pages.*;
+
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 public class TestBase {
     public static final int TIME_WAIT = 100;
@@ -46,7 +52,6 @@ public class TestBase {
                 app = null;
             }
         }));
-
     }
 
     @After

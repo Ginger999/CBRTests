@@ -1,3 +1,5 @@
+package model;
+
 import java.util.List;
 
 public class Filter {
@@ -55,7 +57,6 @@ public class Filter {
     public List<String> getMemoryCaptions() {
         return memoryCaptions;
     }
-
 
     public class Builder {
         private Builder() {

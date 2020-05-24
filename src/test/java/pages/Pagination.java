@@ -1,12 +1,13 @@
-import java.util.List;
+package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+
+import java.util.List;
 
 public class Pagination extends Page {
 

@@ -1,8 +1,9 @@
-import java.util.HashSet;
-import java.util.Set;
+package tests;
 
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import model.Filter;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
@@ -10,15 +11,18 @@ import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @RunWith(DataProviderRunner.class)
 public class Test05 extends TestBase {
-    @Description("Сравнивает характеристики цены на телефон по акции и старой ценыы, выводит результаты в отчет.")
+    @Description("Сравнивает характеристики цены на телефон по акции и старой цены, выводит результаты в отчет.")
     @Test
     @UseDataProvider(value = "test05", location = DataProviders.class)
-    public void testLisAndProductPagePrices(Filter filter) {
+    public void testListAndProductPagePrices(Filter filter) {
         app.menuLeft.openSmartphones2019();
         app.filterLeft.setFilterValues(filter);
         app.filterLeft.filterByShowButton(filter.getStockValues().get(0));

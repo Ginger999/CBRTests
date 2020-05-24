@@ -1,16 +1,17 @@
+package pages;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 import io.qameta.allure.Step;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ProductPage extends Page {
 

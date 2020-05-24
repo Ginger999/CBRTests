@@ -1,17 +1,21 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
+package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 import io.qameta.allure.Step;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+import static tests.TestBase.TIME_I_WAIT_DEFAULT;
+import static tests.TestBase.TIME_I_WAIT_MAXIMUM;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 public class MenuLeft extends Page {
 
@@ -83,7 +87,7 @@ public class MenuLeft extends Page {
 
     @Step("Open menu item")
     public MenuLeft open(List<String> menuItems) {
-        driver.manage().timeouts().implicitlyWait(TestBase.TIME_I_WAIT_MAXIMUM, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().implicitlyWait(TIME_I_WAIT_MAXIMUM, TimeUnit.MILLISECONDS);
         wait.until(numberOfElementsToBeMoreThan(By.cssSelector("div.menu-desktop__root-info"), 2));
         WebElement leftMenuItem = getItem(menuItems);
         if (leftMenuItem != null) {
@@ -91,7 +95,7 @@ public class MenuLeft extends Page {
         }
         // wait for the element - 'Наличие'
         wait.until(presenceOfElementLocated(By.cssSelector("span.ui-collapse__link-text")));
-        driver.manage().timeouts().implicitlyWait(TestBase.TIME_I_WAIT_DEFAULT, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().implicitlyWait(TIME_I_WAIT_DEFAULT, TimeUnit.MILLISECONDS);
         return this;
     }
 

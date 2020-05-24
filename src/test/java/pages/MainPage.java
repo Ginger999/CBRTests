@@ -1,11 +1,12 @@
+package pages;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 import io.qameta.allure.Step;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class MainPage extends Page {
 

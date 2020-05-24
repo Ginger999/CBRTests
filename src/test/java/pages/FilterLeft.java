@@ -1,4 +1,6 @@
-import java.util.List;
+package pages;
+
+import model.Filter;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.qameta.allure.Step;
+
+import java.util.List;
 
 public class FilterLeft extends Page {
 
@@ -18,7 +22,7 @@ public class FilterLeft extends Page {
     /*
      * Catches 'Показать' button and clicks on it
      * 1. click on checkbox wich contains value name
-     * 2. wait 'Показать' button
+     * 2. wait for 'Показать' button
      * 3. click on 'Показать' button
      */
     private void clickShowButton(String cssCheckProperty, String xpathCheckClick, String cssFloatButton) {

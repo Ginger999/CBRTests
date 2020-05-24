@@ -1,19 +1,23 @@
+package tests;
+
+import model.Filter;
+
 import org.openqa.selenium.WebElement;
+
+import io.qameta.allure.Description;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-
-import io.qameta.allure.Description;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(DataProviderRunner.class)
 public class Test02 extends TestBase {
-    @Description("Выбирает для срвнения два телефона, проверяет, что перестали отображаться одинаковые параметры, если установить опцию 'Только различающиеся'.")
+    @Description("Выбирает для срвнения два телефона. Проверяет, что перестали отображаться одинаковые параметры, если установить опцию 'Только различающиеся'.")
     @Test
     @UseDataProvider(value = "test02", location = DataProviders.class)
     public void testPhoneComparison(Filter filter) {

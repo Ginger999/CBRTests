@@ -1,15 +1,18 @@
+package pages;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 import io.qameta.allure.Step;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+import static tests.TestBase.TIME_I_WAIT_DEFAULT;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ProductList extends Page {
 
@@ -39,7 +42,7 @@ public class ProductList extends Page {
 
         wait.until(titleContains("Сравнение товаров"));
         wait.until(numberOfElementsToBeMoreThan(By.cssSelector("section.group-table__row"), 0));
-        driver.manage().timeouts().implicitlyWait(TestBase.TIME_I_WAIT_DEFAULT, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().implicitlyWait(TIME_I_WAIT_DEFAULT, TimeUnit.MILLISECONDS);
         return this;
     }
 

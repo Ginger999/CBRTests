@@ -1,12 +1,16 @@
+package tests;
+
+import model.Filter;
+
 import org.openqa.selenium.WebElement;
+
+import io.qameta.allure.Description;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-
-import io.qameta.allure.Description;
 
 import java.util.List;
 

@@ -1,15 +1,18 @@
-import org.junit.Test;
-import org.junit.runner.RunWith;
+package tests;
 
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import model.Filter;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
+
 @RunWith(DataProviderRunner.class)
 public class Test03 extends TestBase {
-    @Description("Проверяет, что цена на смартфон изменилась, если выбрать с гарантией. Выводит в отчет цену телефона, стоимость гарантии.")
+    @Description("Проверяет стоимость телефона с гарантией и без. Выводит в отчет цену телефона, стоимость гарантии.")
     @Test
     @UseDataProvider(value = "test03", location = DataProviders.class)
     public void testPriceWithGauarantee(Filter filter) {

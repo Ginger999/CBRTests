@@ -1,4 +1,8 @@
+package tests;
+
 import org.openqa.selenium.WebElement;
+
+import io.qameta.allure.Description;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,20 +10,15 @@ import org.junit.Test;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.qameta.allure.Description;
-
 public class Test04 extends TestBase {
-    @Description("Сравнивет количество телефонов, указанных в пункте меню с суммарным количеством телефонов на страницах.")
+    @Description("Сравнивет количество телефонов, указанных в пункте меню, с суммарным количеством телефонов на страницах.")
     @Test
     public void testPopupItemCount() {
-        // Select menu path
-        List<String> menuPath;
-        // menuPath = utils.getPathOfSmartphones2019();
-        menuPath = app.menuLeft.getPathOfSmartphonesLargeBattry();
+        // select menu path
+        List<String> menuPath = app.menuLeft.getPathOfSmartphonesLargeBattry(); // getPathOfSmartphones2019();
 
-        // get count of products from menu item label
-        int productCountInMenu = app.menuLeft.getItemProductCount(menuPath);
-        // open menu path
+        int productCountInMenu = app.menuLeft.getItemProductCount(menuPath); // get count of products from menu item
+                                                                             // label
         app.menuLeft.open(menuPath);
 
         int productCountOnPages = 0;
