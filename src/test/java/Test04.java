@@ -1,9 +1,10 @@
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.WebElement;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.qameta.allure.Description;
 
@@ -13,13 +14,13 @@ public class Test04 extends TestBase {
     public void testPopupItemCount() {
         // Select menu path
         List<String> menuPath;
-        //menuPath = utils.getMenuPathOfSmartphones2019();
-        menuPath = utils.getMenuPathOfSmartphonesLargeBattry();
+        //menuPath = utils.getPathOfSmartphones2019();
+        menuPath = app.menuLeft.getPathOfSmartphonesLargeBattry();
 
         // get count of products from menu item label
-        int productCountInMenu = utils.getMenuItemProductCount(menuPath);
+        int productCountInMenu = app.menuLeft.getItemProductCount(menuPath);
         // open menu path
-        utils.openLeftMenu(menuPath);
+        app.menuLeft.open(menuPath);
 
         int productCountOnPages = 0;
         WebElement nextPageButton;
@@ -28,10 +29,10 @@ public class Test04 extends TestBase {
         List<WebElement> phones;
         driver.manage().timeouts().implicitlyWait(150, TimeUnit.MILLISECONDS);
         do {
-            phones = utils.getListPageProductBlocks();
+            phones = app.productList.getProductBlocks();
             productCountOnPages = productCountOnPages + phones.size();
-            nextPageButton = utils.getEnableNextPageButton();
-            utils.clickNextPage(nextPageButton);
+            nextPageButton = app.pagination.getEnableNextPageButton();
+            app.pagination.clickNextPage(nextPageButton);
         } while (nextPageButton != null);
 
         // check asserts for number of smartphones

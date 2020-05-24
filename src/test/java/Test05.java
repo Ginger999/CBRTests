@@ -19,15 +19,15 @@ public class Test05 extends TestBase {
     @Test
     @UseDataProvider(value = "test05", location = DataProviders.class)
     public void testLisAndProductPagePrices(Filter filter) {
-        utils.openMenuSmartphones2019();
-        utils.setFilterValues(filter);
-        utils.filterByShowButton(filter.getStockValues().get(0));
+        app.menuLeft.openSmartphones2019();
+        app.filterLeft.setFilterValues(filter);
+        app.filterLeft.filterByShowButton(filter.getStockValues().get(0));
 
-        WebElement phoneBlock = utils.getListPageProductBlocks().get(0); // get the 1st phone block in the list
-        WebElement phoneLink = utils.getProductLink(phoneBlock);
+        WebElement phoneBlock = app.productList.getProductBlocks().get(0); // get the 1st phone block in the list
+        WebElement phoneLink = app.productList.getProductLink(phoneBlock);
 
-        WebElement oldPrice1 = utils.getProductListPriceNonStock(phoneBlock);
-        WebElement newPrice1 = utils.getProductListPriceWithStock(phoneBlock);
+        WebElement oldPrice1 = app.productList.getPriceNonStock(phoneBlock);
+        WebElement newPrice1 = app.productList.getPriceWithStock(phoneBlock);
 
         Float oldPrTab1 = getPriceFloat(oldPrice1);
         Float newPrTab1 = getPriceFloat(newPrice1);

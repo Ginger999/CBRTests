@@ -37,8 +37,8 @@ public class TestBase {
         System.out.println(((HasCapabilities) driver).getCapabilities());
 
         wait = new WebDriverWait(driver, TIME_WAIT);
-        app = new Application(driver, wait);
         utils = new Utils(driver, wait);
+        app = new Application(driver, wait, utils);
         tlApp.set(app);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
