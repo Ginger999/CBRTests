@@ -1,3 +1,5 @@
+package model;
+
 import java.util.List;
 
 public class Filter {
@@ -31,9 +33,11 @@ public class Filter {
     public List<String> getStockValues() {
         return stockValues;
     }
+
     public List<String> getStockCaptions() {
         return stockCaptions;
     }
+
     public String getFilterBrand() {
         return filterBrand;
     }
@@ -53,7 +57,6 @@ public class Filter {
     public List<String> getMemoryCaptions() {
         return memoryCaptions;
     }
-
 
     public class Builder {
         private Builder() {

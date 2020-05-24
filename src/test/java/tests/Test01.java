@@ -1,14 +1,18 @@
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+package tests;
+
+import model.Filter;
+
 import org.openqa.selenium.WebElement;
 
 import io.qameta.allure.Description;
 
-import java.util.List;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 
+import java.util.List;
 
 @RunWith(DataProviderRunner.class)
 public class Test01 extends TestBase {
@@ -16,9 +20,9 @@ public class Test01 extends TestBase {
     @Test
     @UseDataProvider(value = "test01", location = DataProviders.class)
     public void testFilter(Filter filter) {
-        utils.openMenuSmartphones2019();
-        utils.setFilterValues(filter); // set  filter values to filter phones
-        utils.filterByApllyButton(); // aply filter using 'Приметить' button
+        app.menuLeft.openSmartphones2019();
+        app.filterLeft.setFilterValues(filter); // set filter values to filter phones
+        app.filterLeft.filterByApplyButton(); // apply filter using 'Приметить' button
 
         List<WebElement> phones;
         String phonesContent;
@@ -26,7 +30,7 @@ public class Test01 extends TestBase {
         // check asserts for each page
         do {
 
-            phones = utils.getListPageProductBlocks();
+            phones = app.productList.getProductBlocks();
             for (WebElement phone : phones) {
                 phonesContent = phone.getAttribute("textContent");
 
@@ -39,8 +43,8 @@ public class Test01 extends TestBase {
                         utils.hasOneOfValues(phonesContent, filter.getMemoryCaptions()));
             }
             // the next page
-            nextPageButton = utils.getEnableNextPageButton();
-            utils.clickNextPage(nextPageButton);
+            nextPageButton = app.pagination.getEnableNextPageButton();
+            app.pagination.clickNextPage(nextPageButton);
         } while (nextPageButton != null);
     }
 }

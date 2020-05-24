@@ -1,31 +1,36 @@
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+package tests;
+
+import model.Filter;
+
 import org.openqa.selenium.WebElement;
 
 import io.qameta.allure.Description;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(DataProviderRunner.class)
 public class Test02 extends TestBase {
-    @Description("Выбирает для срвнения два телефона, проверяет, что перестали отображаться одинаковые параметры, если установить опцию 'Только различающиеся'.")
+    @Description("Выбирает для срвнения два телефона. Проверяет, что перестали отображаться одинаковые параметры, если установить опцию 'Только различающиеся'.")
     @Test
     @UseDataProvider(value = "test02", location = DataProviders.class)
     public void testPhoneComparison(Filter filter) {
-        utils.openMenuSmartphones2019();
-        utils.setFilterValues(filter);
-        utils.filterByApllyButton();
+        app.menuLeft.openSmartphones2019();
+        app.filterLeft.setFilterValues(filter);
+        app.filterLeft.filterByApplyButton();
 
         // add phones to compare
         int phonesCount = 2;
-        utils.addListPageProductsToCompare(phonesCount);
+        app.productList.addProductsToCompare(phonesCount);
 
         List<String> listOfEqual = getFeatureList(phonesCount, "equal");
-        utils.showDifferentProductSettings();
+        app.productPage.showDifferentSettings();
         List<String> listOfDifference = getFeatureList(phonesCount, "");
 
         listOfEqual.retainAll(listOfDifference); // get intersection list
@@ -34,7 +39,7 @@ public class Test02 extends TestBase {
     }
 
     private List<String> getFeatureList(int phonesCount, String kind) {
-        List<WebElement> rows = utils.getProductPageComparisonFeaturesBlocks();
+        List<WebElement> rows = app.productPage.getComparisonFeaturesBlocks();
         WebElement feature;
         List<WebElement> values;
         String v1;
@@ -43,7 +48,7 @@ public class Test02 extends TestBase {
         boolean isEqual;
         for (WebElement row : rows) {
             feature = row;
-            values = utils.getFeatureBlockValues(feature); // featureBlock values
+            values = app.productPage.getFeatureBlockValues(feature); // featureBlock values
             switch (kind) {
                 case "equal":
                     isEqual = true;
@@ -54,12 +59,12 @@ public class Test02 extends TestBase {
                         isEqual = isEqual & v1.equals(v2);
                     }
                     if (isEqual) {
-                        featureNamesList.add(utils.getFeatureTitle(feature)); // add feature name to list
+                        featureNamesList.add(app.productPage.getFeatureTitle(feature)); // add feature name to list
                     }
                     break;
 
                 case "":
-                    featureNamesList.add(utils.getFeatureTitle(feature)); // add feature name to list
+                    featureNamesList.add(app.productPage.getFeatureTitle(feature)); // add feature name to list
                     break;
             }
         }

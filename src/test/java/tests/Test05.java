@@ -1,8 +1,9 @@
-import java.util.HashSet;
-import java.util.Set;
+package tests;
 
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import model.Filter;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
@@ -10,35 +11,40 @@ import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @RunWith(DataProviderRunner.class)
 public class Test05 extends TestBase {
-    @Description("Сравнивает характеристики цены на телефон по акции и старой ценыы, выводит результаты в отчет.")
+    @Description("Сравнивает характеристики цены на телефон по акции и старой цены, выводит результаты в отчет.")
     @Test
     @UseDataProvider(value = "test05", location = DataProviders.class)
-    public void testLisAndProductPagePrices(Filter filter) {
-        utils.openMenuSmartphones2019();
-        utils.setFilterValues(filter);
-        utils.filterByShowButton(filter.getStockValues().get(0));
+    public void testListAndProductPagePrices(Filter filter) {
+        app.menuLeft.openSmartphones2019();
+        app.filterLeft.setFilterValues(filter);
+        app.filterLeft.filterByShowButton(filter.getStockValues().get(0));
 
-        WebElement phoneBlock = utils.getListPageProductBlocks().get(0); // get the 1st phone block in the list
-        WebElement phoneLink = utils.getProductLink(phoneBlock);
+        WebElement phoneBlock = app.productList.getProductBlocks().get(0); // get the 1st phone block in the list
+        WebElement phoneLink = app.productList.getProductLink(phoneBlock);
 
-        WebElement oldPrice1 = utils.getProductListPriceNonStock(phoneBlock);
-        WebElement newPrice1 = utils.getProductListPriceWithStock(phoneBlock);
+        WebElement oldPrice1 = app.productList.getPriceNonStock(phoneBlock);
+        WebElement newPrice1 = app.productList.getPriceWithStock(phoneBlock);
 
         Float oldPrTab1 = getPriceFloat(oldPrice1);
         Float newPrTab1 = getPriceFloat(newPrice1);
 
         reportLessThan("Цена по акции меньше чем предыдущая стоимость", newPrTab1, oldPrTab1);
-        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice1), getFontSize(newPrice1));
-        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции", getFontWeight(oldPrice1), getFontWeight(newPrice1));
+        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice1),
+                getFontSize(newPrice1));
+        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции",
+                getFontWeight(oldPrice1), getFontWeight(newPrice1));
 
         // open product link in a new tab
         String firstWindow = driver.getWindowHandle(); // remember the current tab
-        Set<String>existingWindows= driver.getWindowHandles(); // remember current windows handeles
+        Set<String> existingWindows = driver.getWindowHandles(); // remember current windows handeles
         utils.actionOpenLinlInNewTab(phoneLink, 2); // open the product in another tab and wait 2 open tabs
         String secondWindow = getWindowHandle(existingWindows); // define the new tab handle
         driver.switchTo().window(secondWindow);
@@ -52,8 +58,10 @@ public class Test05 extends TestBase {
         reportEquals("Старые цены в списке продуктов и на странице продукта совпадают", oldPrTab1, oldPrTab2);
         reportEquals("Цены по акции в списке продуктов и на странице продукта совпадают", newPrTab1, newPrTab2);
         reportLessThan("Цена по акции меньше чем предыдущая стоимость", newPrTab2, oldPrTab2);
-        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice2), getFontSize(newPrice2));
-        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции", getFontWeight(oldPrice2), getFontWeight(newPrice2));
+        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice2),
+                getFontSize(newPrice2));
+        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции",
+                getFontWeight(oldPrice2), getFontWeight(newPrice2));
 
         driver.close(); // close the current tab
         driver.switchTo().window(firstWindow); // return to original tab

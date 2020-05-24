@@ -1,16 +1,21 @@
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+package tests;
+
+import app.Application;
+import pages.*;
+
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+
 public class TestBase {
     public static final int TIME_WAIT = 100;
     public static final int TIME_I_WAIT_DEFAULT = 100;
     public static final int TIME_I_WAIT_MAXIMUM = 5000;
-
 
     public static ThreadLocal<Application> tlApp = new ThreadLocal<>();
     public Application app;
@@ -37,8 +42,8 @@ public class TestBase {
         System.out.println(((HasCapabilities) driver).getCapabilities());
 
         wait = new WebDriverWait(driver, TIME_WAIT);
-        app = new Application(driver, wait);
         utils = new Utils(driver, wait);
+        app = new Application(driver, wait, utils);
         tlApp.set(app);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -47,7 +52,6 @@ public class TestBase {
                 app = null;
             }
         }));
-
     }
 
     @After
