@@ -28,6 +28,7 @@ public class ProductPage extends Page {
     public List<WebElement> getFeatureBlockValues(WebElement featureBlock) {
         return featureBlock.findElements(By.cssSelector("div.group-table__data>p"));
     }
+
     /* Returns the list of feature blocks */
     public String getCurrentPrice() {
         return getPriceBlock().getAttribute("data-price-value").replaceAll(" ", "");
@@ -47,7 +48,9 @@ public class ProductPage extends Page {
         return featureBlock.findElement(By.cssSelector("span.group-table__option-name")).getAttribute("textContent");
     }
 
-    /* Returns the product price contained in the product block on the product page*/
+    /*
+     * Returns the product price contained in the product block on the product page
+     */
     private WebElement getPriceBlock() {
         return wait.until(visibilityOfElementLocated(By.cssSelector("span.current-price-value[data-role*='current']")));
     }

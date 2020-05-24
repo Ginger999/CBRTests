@@ -10,7 +10,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class Pagination extends Page {
 
-    public Pagination (WebDriver driver, WebDriverWait wait, Utils utils) {
+    public Pagination(WebDriver driver, WebDriverWait wait, Utils utils) {
         super(driver, wait, utils);
         PageFactory.initElements(driver, this);
     }
@@ -34,7 +34,7 @@ public class Pagination extends Page {
             int nextPageButtonIndex = pages.size() - 1 - 1;
             // get last page index
             int lastPageIndex = pages.size() - 1 - 2;
-            //get '>' button as webelement
+            // get '>' button as webelement
             WebElement nextPageButtonDetails;
             pages = getPaginationButtons();
             if (driver.findElements(By.cssSelector("a.pagination-widget__page-link")).size() > 0) {
@@ -46,8 +46,8 @@ public class Pagination extends Page {
             }
 
             // check is '>' button is enabled
-            if (!pages.get(lastPageIndex).getAttribute("className").contains("active") &
-                    !nextPageButtonDetails.getAttribute("className").contains("disabled")) {
+            if (!pages.get(lastPageIndex).getAttribute("className").contains("active")
+                    & !nextPageButtonDetails.getAttribute("className").contains("disabled")) {
                 return pages.get(nextPageButtonIndex);
             }
         }

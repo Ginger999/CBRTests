@@ -33,12 +33,14 @@ public class Test05 extends TestBase {
         Float newPrTab1 = getPriceFloat(newPrice1);
 
         reportLessThan("Цена по акции меньше чем предыдущая стоимость", newPrTab1, oldPrTab1);
-        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice1), getFontSize(newPrice1));
-        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции", getFontWeight(oldPrice1), getFontWeight(newPrice1));
+        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice1),
+                getFontSize(newPrice1));
+        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции",
+                getFontWeight(oldPrice1), getFontWeight(newPrice1));
 
         // open product link in a new tab
         String firstWindow = driver.getWindowHandle(); // remember the current tab
-        Set<String>existingWindows= driver.getWindowHandles(); // remember current windows handeles
+        Set<String> existingWindows = driver.getWindowHandles(); // remember current windows handeles
         utils.actionOpenLinlInNewTab(phoneLink, 2); // open the product in another tab and wait 2 open tabs
         String secondWindow = getWindowHandle(existingWindows); // define the new tab handle
         driver.switchTo().window(secondWindow);
@@ -52,8 +54,10 @@ public class Test05 extends TestBase {
         reportEquals("Старые цены в списке продуктов и на странице продукта совпадают", oldPrTab1, oldPrTab2);
         reportEquals("Цены по акции в списке продуктов и на странице продукта совпадают", newPrTab1, newPrTab2);
         reportLessThan("Цена по акции меньше чем предыдущая стоимость", newPrTab2, oldPrTab2);
-        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice2), getFontSize(newPrice2));
-        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции", getFontWeight(oldPrice2), getFontWeight(newPrice2));
+        reportLessThan("Размер шрифта для старой цены меньше чем размер шрифта цены по акции", getFontSize(oldPrice2),
+                getFontSize(newPrice2));
+        reportLessThan("Толщина шрифта для старой цены меньше чем толщина шрифта цены по акции",
+                getFontWeight(oldPrice2), getFontWeight(newPrice2));
 
         driver.close(); // close the current tab
         driver.switchTo().window(firstWindow); // return to original tab

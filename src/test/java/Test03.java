@@ -28,9 +28,10 @@ public class Test03 extends TestBase {
         allurePint(currentPrice, quarateePrice, totalPrice);
     }
 
-    //allure report
+    // allure report
     @Step("Print price of a phone with a guarantee")
     public void allurePint(String currentPrice, String quarateePrice, String totalPrice) {
-        System.out.println("Phone price: " + currentPrice + " Guarantee: " + quarateePrice + " Total price: " + totalPrice);
+        System.out.println(
+                "Phone price: " + currentPrice + " Guarantee: " + quarateePrice + " Total price: " + totalPrice);
     }
 }

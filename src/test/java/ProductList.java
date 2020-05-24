@@ -23,7 +23,7 @@ public class ProductList extends Page {
         // add products to compare
         String cssProducts = "label.ui-checkbox[data-commerce-target='CATALOG_PRODUCT_COMPARE']";
         List<WebElement> products = wait
-            .until(numberOfElementsToBeMoreThan(By.cssSelector(cssProducts), phoneNumberToCompare));
+                .until(numberOfElementsToBeMoreThan(By.cssSelector(cssProducts), phoneNumberToCompare));
         // add products to compare
         for (int p = 0; p < phoneNumberToCompare; p++) {
             products.get(p).click();
@@ -63,8 +63,12 @@ public class ProductList extends Page {
         return utils.getAllElements(By.cssSelector("div[data-id='product']"));
     }
 
-    /* Returns the first clickable link of product on the page after search starting from the root element*/
+    /*
+     * Returns the first clickable link of product on the page after search starting
+     * from the root element
+     */
     public WebElement getProductLink(WebElement element) {
-        return wait.until(elementToBeClickable(element.findElement(By.cssSelector("a.ui-link[data-role='clamped-link']"))));
+        return wait.until(
+                elementToBeClickable(element.findElement(By.cssSelector("a.ui-link[data-role='clamped-link']"))));
     }
 }

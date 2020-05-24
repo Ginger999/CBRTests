@@ -15,11 +15,12 @@ public class FilterLeft extends Page {
         PageFactory.initElements(driver, this);
     }
 
-    /* Catches 'Показать' button and clicks on it
-    1. click on checkbox wich contains value name
-    2. wait 'Показать' button
-    3. click on 'Показать' button
-    */
+    /*
+     * Catches 'Показать' button and clicks on it
+     * 1. click on checkbox wich contains value name
+     * 2. wait 'Показать' button
+     * 3. click on 'Показать' button
+     */
     private void clickShowButton(String cssCheckProperty, String xpathCheckClick, String cssFloatButton) {
         // find the 1st part of complex checkbox: element by it's value
         WebElement btnCheckProperty = driver.findElement(By.cssSelector(cssCheckProperty));
@@ -41,7 +42,7 @@ public class FilterLeft extends Page {
                 btnCheckClick.click();
                 // try click on the float button
                 try {
-                    //wait.until(presenceOfElementLocated(By.cssSelector(cssFloatButton))).click();
+                    // wait.until(presenceOfElementLocated(By.cssSelector(cssFloatButton))).click();
                     driver.findElement(By.cssSelector(cssFloatButton)).click();
                     isAppliedFloatButton = true;
                 } catch (Exception e) {
@@ -61,8 +62,7 @@ public class FilterLeft extends Page {
     /* Clicks on 'Применить' button */
     public FilterLeft filterByApplyButton() {
         WebElement btnFilter = utils.isSubElementFoundedAfterScrolling(null,
-                "button.button-ui.button-ui_brand.left-filters__button",
-                "textContent", "Применить", "startsWith");
+                "button.button-ui.button-ui_brand.left-filters__button", "textContent", "Применить", "startsWith");
         if (btnFilter != null) {
             utils.actions.moveToElement(btnFilter).build().perform();
             btnFilter.click();
@@ -85,7 +85,7 @@ public class FilterLeft extends Page {
 
     /* Finds Section and marks buttons which have specified values */
     @Step("Filter product by sectionName and sectionValues")
-    private void filterOneSection(String sectionName, List < String > sectionValues) {
+    private void filterOneSection(String sectionName, List<String> sectionValues) {
         String buttonType = "check";
         String attributeName = "value";
         boolean isShowAllButton = true;
@@ -113,16 +113,14 @@ public class FilterLeft extends Page {
         }
 
         // find section by sectionName
-        WebElement section = utils.isSubElementFoundedAfterScrolling(null,
-                ".ui-collapse.ui-collapse_list", "textContent", sectionName,
-                "startsWith");
+        WebElement section = utils.isSubElementFoundedAfterScrolling(null, ".ui-collapse.ui-collapse_list",
+                "textContent", sectionName, "startsWith");
 
         // do actions if a section exists
         if (section != null) {
             // open section
-            WebElement btnCollapse = utils.isSubElementFoundedAfterScrolling(section,
-                    "span.ui-collapse__link-text", "textContent",
-                    sectionName, "equals");
+            WebElement btnCollapse = utils.isSubElementFoundedAfterScrolling(section, "span.ui-collapse__link-text",
+                    "textContent", sectionName, "equals");
 
             if (btnCollapse != null) {
                 if (utils.isSubElementPresent(section,
@@ -144,11 +142,11 @@ public class FilterLeft extends Page {
             String locator;
             String xpath;
             // scan values
-            for (String sectionValue: sectionValues) {
+            for (String sectionValue : sectionValues) {
                 value = sectionValue;
                 locator = "input.ui-checkbox__input.ui-checkbox__input_list[" + attributeName + "='" + value + "']";
-                xpath = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @" +
-                        attributeName + "='" + value + "']/..";
+                xpath = "//input[contains(@class, 'ui-checkbox__input') and contains(@class, 'ui-checkbox__input_list') and @"
+                        + attributeName + "='" + value + "']/..";
 
                 if ("radio".equals(buttonType)) {
                     locator = locator.replace("checkbox", "radio");
@@ -179,9 +177,10 @@ public class FilterLeft extends Page {
 
     /* Clicks on the check/radio buttons which have specified values */
     private void setCheckValue(WebElement sectionElement, String locator, String xpath, String attribute,
-                              String value) {
+            String value) {
         // find the button wich has a specidfied value
-        WebElement element = utils.isSubElementFoundedAfterScrolling(sectionElement, locator, attribute, value, "equals");
+        WebElement element = utils.isSubElementFoundedAfterScrolling(sectionElement, locator, attribute, value,
+                "equals");
         // click on the clickabele part of the button
         if (element != null) {
             element = driver.findElement(By.xpath(xpath));

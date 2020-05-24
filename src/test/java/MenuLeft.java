@@ -77,7 +77,7 @@ public class MenuLeft extends Page {
     }
 
     /* Returns a specified menu path */
-    public List < String > getPathOfSmartphonesLargeBattry() {
+    public List<String> getPathOfSmartphonesLargeBattry() {
         return Arrays.asList("Смартфоны и гаджеты", "Смартфоны", "С большим аккумулятором");
     }
 

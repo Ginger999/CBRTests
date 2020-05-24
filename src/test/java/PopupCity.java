@@ -13,7 +13,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class PopupCity extends Page {
 
-    public PopupCity (WebDriver driver, WebDriverWait wait, Utils utils) {
+    public PopupCity(WebDriver driver, WebDriverWait wait, Utils utils) {
         super(driver, wait, utils);
         PageFactory.initElements(driver, this);
     }

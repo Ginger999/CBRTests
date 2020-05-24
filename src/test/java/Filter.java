@@ -31,9 +31,11 @@ public class Filter {
     public List<String> getStockValues() {
         return stockValues;
     }
+
     public List<String> getStockCaptions() {
         return stockCaptions;
     }
+
     public String getFilterBrand() {
         return filterBrand;
     }

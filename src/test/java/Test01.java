@@ -17,7 +17,7 @@ public class Test01 extends TestBase {
     @UseDataProvider(value = "test01", location = DataProviders.class)
     public void testFilter(Filter filter) {
         app.menuLeft.openSmartphones2019();
-        app.filterLeft.setFilterValues(filter); // set  filter values to filter phones
+        app.filterLeft.setFilterValues(filter); // set filter values to filter phones
         app.filterLeft.filterByApplyButton(); // apply filter using 'Приметить' button
 
         List<WebElement> phones;

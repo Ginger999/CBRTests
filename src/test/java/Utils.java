@@ -30,16 +30,17 @@ public class Utils {
         wait.until(numberOfWindowsToBe(numberOfWIndows));
     }
 
-     /* Returns the calculated product guarantee value */
+    /* Returns the calculated product guarantee value */
     public String calcProductPageGuaranteeValue(String currentPrice, String totalPrice) {
         return Float.toString(Float.parseFloat(totalPrice) - Float.parseFloat(currentPrice));
     }
 
-    /* Retuns true if webelement is founded after down scrolling
-       using driver or an element as a root to search.
-    */
+    /*
+     * Retuns true if webelement is founded after down scrolling using driver or an
+     * element as a root to search.
+     */
     public WebElement isSubElementFoundedAfterScrolling(WebElement rootElement, String cssElements,
-                                                        String attributeName, String attributeValue, String comparison) {
+            String attributeName, String attributeValue, String comparison) {
         List<WebElement> elements;
         WebElement currentElement;
         int scroll_max = 6; // max number of scrolling attempts to find the ellement
@@ -55,7 +56,7 @@ public class Utils {
             }
 
             // scan elements which where founded by cssSelector
-            for (WebElement element: elements) {
+            for (WebElement element : elements) {
                 currentElement = element;
                 switch (comparison) {
                     case "":
@@ -83,7 +84,7 @@ public class Utils {
         return null;
     }
 
-    /* Returns true if webelement is present in the current document*/
+    /* Returns true if webelement is present in the current document */
     public boolean isSubElementPresent(WebElement rootElement, By locator) {
         if (rootElement == null) {
             return driver.findElements(locator).size() > 0;

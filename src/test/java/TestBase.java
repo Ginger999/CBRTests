@@ -11,7 +11,6 @@ public class TestBase {
     public static final int TIME_I_WAIT_DEFAULT = 100;
     public static final int TIME_I_WAIT_MAXIMUM = 5000;
 
-
     public static ThreadLocal<Application> tlApp = new ThreadLocal<>();
     public Application app;
     public WebDriver driver;

@@ -14,7 +14,7 @@ public class Test04 extends TestBase {
     public void testPopupItemCount() {
         // Select menu path
         List<String> menuPath;
-        //menuPath = utils.getPathOfSmartphones2019();
+        // menuPath = utils.getPathOfSmartphones2019();
         menuPath = app.menuLeft.getPathOfSmartphonesLargeBattry();
 
         // get count of products from menu item label
@@ -36,6 +36,7 @@ public class Test04 extends TestBase {
         } while (nextPageButton != null);
 
         // check asserts for number of smartphones
-        Assert.assertEquals("Количество товаров в меню и на страницах не совпадает:", productCountInMenu, productCountOnPages);
+        Assert.assertEquals("Количество товаров в меню и на страницах не совпадает:", productCountInMenu,
+                productCountOnPages);
     }
 }
